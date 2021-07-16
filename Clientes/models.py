@@ -28,7 +28,7 @@ class FuenteDinero(models.Model):
 # crear clase tipo de gastos
 class TipoGasto(models.Model):
     Tipo = models.CharField(max_length=25)
-    class Meta: away = ("TipoGasto")
+    class Meta: verbose_name_plural = ("TipoGasto")
     def __str__(self):        
         return f"{self.Tipo}"
 
@@ -37,7 +37,7 @@ class Ingreso(models.Model):
     Fuente = models.ForeignKey(FuenteDinero, verbose_name=("Fuente"), on_delete=models.CASCADE)    
     Fecha_Registro = models.DateField()
     Monto= models.IntegerField()
-    class Meta: away = ("Ingreso")
+    class Meta: verbose_name_plural = ("Ingreso")
     def __str__(self): 
         return f"{self.Monto}"
 
@@ -48,6 +48,6 @@ class Gasto(models.Model):
     Fecha_Registro = models.DateField()
     Tipo = models.ForeignKey(TipoGasto, verbose_name=("Tipo"), on_delete=models.CASCADE)
     Monto = models.IntegerField()
-    class Meta:away = ("Gasto")       
+    class Meta:verbose_name_plural = ("Gasto")       
     def __str__(self):
         return f"{self.Monto}"
