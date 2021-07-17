@@ -41,6 +41,7 @@ PRESUPUESTO PERSONAL
 - Fuentes de dinero (mantenimiento)
 - Registro del gasto (tipo, fuente, la fecha, monto)
     - Actualizacion del saldo
+
 -Registo de ingreso (fuente, fecha, monto)
     - Actualizacion del saldo
 -Visualiazcion del saldo actual en todo momento
@@ -50,3 +51,10 @@ Reporte de gastos e ingresos mensuales y anual
     - En grafica de pastel
 -Despliegue de entradas y salidas del mes actual
     -Opcion para ver meses **anteriores**
+
+
+**Trabajos Realizados**
+~~~
+- Login
+- Archivos estaticos
+~~~

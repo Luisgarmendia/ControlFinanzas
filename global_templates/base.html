@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'global/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'global/css/icon.css' %}">
+    <title>{% block title %}{% endblock title %}</title>
+    {% block css %}{% endblock css %}
+</head>
+<body>
+    <script src="{% static 'js/materialize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/custon.js' %}"></script>
+    <nav>
+      <div class="nav-wrapper container">
+        <a href="{% url 'finanzas:index' %}" class="brand-logo"><i class="material-icons">cloud
+          </i>{% if request.user.is_staff == False %} {{ request.user.customer.apellido }}, {{ request.user.customer.nombre }} {% endif %}</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'finanzas:transacciones' %}">Transacciones</a></li>
+          {% if request.user.is_staff == False %}
+          <li><a href="{% url 'finanzas:cuentas' %}">Estado Cuenta</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout_view' %}">Salir</a></li>
+
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      {% block container %}
+
+      {% endblock container %}
+    </div>
+  {% block js %}{% endblock js %}
+</body>
+</html>
