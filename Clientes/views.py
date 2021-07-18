@@ -3,7 +3,7 @@ from .models import Cliente
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html', {})
+    return render(request, 'registro/index.html', {})
 
 def clientes(request):    
     #bucar los datos de la base de datos de Clientes

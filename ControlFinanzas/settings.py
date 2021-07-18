@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Login',
+    'app_login', # SE BORRO LOGIN -> SE AGREGO 'app_login'
     'Clientes',
 ]
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'ControlFinanzas.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'static/global_templates'],# SE AGREGA LA DIRECCION DE LA PLANTILLA GLOBAL A 'static/global_templates'
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,11 +115,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/' #AGREGA URL DE LOGIN
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#STATIC_ROOT = BASE_DIR / 'static' # SE AGREGA DIRECTORIO ESTATICO DESDE LA RAIZ
+
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Default primary key field type
