@@ -17,16 +17,16 @@
     <script src="{% static 'js/custon.js' %}"></script>
     <nav>
       <div class="nav-wrapper container">
-        <a href="{% url 'finanzas:index' %}" class="brand-logo"><i class="material-icons">cloud
-          </i>{% if request.user.is_staff == False %} {{ request.user.customer.apellido }}, {{ request.user.customer.nombre }} {% endif %}</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="{% url 'finanzas:transacciones' %}">Transacciones</a></li>
-          {% if request.user.is_staff == False %}
-          <li><a href="{% url 'finanzas:cuentas' %}">Estado Cuenta</a></li>
-          {% endif %}
-          <li><a href="{% url 'logout_view' %}">Salir</a></li>
+        
+        <a href="#" class="brand-logo">Hola</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="">Home</a></li>
 
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+          <li><a href="{% url 'app_login:logout_view' %}">LogOut</a></li>
         </ul>
+
       </div>
     </nav>
     <div class="container">

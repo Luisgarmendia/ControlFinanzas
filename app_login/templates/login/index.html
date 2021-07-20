@@ -49,7 +49,7 @@
 					INICIO DE SESIÓN
 				</span>
 				<main>
-                    <form class="login100-form validate-form p-b-33 p-t-5" action="{% url 'login_view' %}" method="POST">
+                    <form class="login100-form validate-form p-b-33 p-t-5" action="{% url 'app_login:login_view' %}" method="POST">
                         {% csrf_token %}
     
                         <div class="wrap-input100 validate-input" data-validate = "Enter username">

@@ -4,12 +4,12 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse
-from Clientes.models import Cliente
+from app_Clientes.models import Cliente
 from django.contrib.auth.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect(reverse('Clientes:index'))
+        return redirect(reverse('app_Clientes:index'))
 
     return render(request, 'login/index.html')
 
@@ -51,7 +51,7 @@ def log_in(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse('Clientes:index'))
+            return redirect(reverse('app_Clientes:index'))
         else:
             messages.add_message(request, messages.ERROR, 'El usuario/contraseña inválidos o la cuenta está desactivada')
             return redirect('/')
