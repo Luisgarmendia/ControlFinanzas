@@ -8,13 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'global/css/materialize.min.css' %}">
     <link rel="stylesheet" href="{% static 'global/css/icon.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/dataTable/datatables.min.css' %}">
     <title>{% block title %}{% endblock title %}</title>
     {% block css %}{% endblock css %}
 </head>
 <body>
-    <script src="{% static 'js/materialize.min.js' %}"></script>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/custon.js' %}"></script>
+    <script src="{% static 'global/js/jquery.min.js' %}"></script>
+    <script src="{% static 'global/js/materialize.min.js' %}"></script>
+    <script src="{% static 'plugins/dataTable/datatables.min.js' %}"></script>
+    <script src="{% static 'global/js/custon.js' %}"></script>
     <nav>
       <div class="nav-wrapper container">
         
@@ -33,6 +35,29 @@
       {% block container %}
 
       {% endblock container %}
+
+    </div >
+
+    <div class="container">
+    
+    <table class="display">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>nombre</th>
+            <th>Perro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      
     </div>
   {% block js %}{% endblock js %}
 </body>

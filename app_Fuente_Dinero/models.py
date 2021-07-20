@@ -2,7 +2,7 @@ from django.db import models
 
 class FuenteDinero(models.Model):
     Cliente = models.ForeignKey('app_Clientes.Cliente', verbose_name=("Cliente"), on_delete=models.CASCADE)
-    Fecha_Registroc = models.DateField()
+    Fecha_Registro = models.DateField()
     Fuente = models.CharField(max_length=25)
     Saldo = models.IntegerField()
     class Meta:
