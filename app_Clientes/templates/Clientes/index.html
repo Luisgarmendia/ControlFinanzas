@@ -1,1 +1,25 @@
 {% extends 'base.html' %}
+
+
+{% block title %}
+    Clientes
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col s5 l12">
+         {% if p %}
+            <form  method="post">
+            {% else %}
+            <form method="post">
+            {% endif %}
+                {% csrf_token %}
+
+
+
+        </div>
+        <div class="col s7 l12">    
+
+        </div>
+    </div>
+{% endblock container %}

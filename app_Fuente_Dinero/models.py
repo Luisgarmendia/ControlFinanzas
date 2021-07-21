@@ -10,5 +10,5 @@ class FuenteDinero(models.Model):
         verbose_name_plural =("Fuente de Dinero")
 
     def __str__(self):
-        return f"Cliente: {self.Cliente}"
+        return f"Cliente: {self.Cliente}, Fuente: {self.Fuente}"
 # Create your models here.

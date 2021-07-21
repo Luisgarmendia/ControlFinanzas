@@ -23,5 +23,6 @@ urlpatterns = [
     path('Clientes/',include('app_Clientes.urls')),# URL CLIENTES
     path('',include('app_login.urls')),# URL Login
     path('FuenteDinero/',include('app_Fuente_Dinero.urls')),# URL FuenteDinero
+    path('ingresos/',include('app_Ingresos.urls')),# URL Ingresos
     
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
