@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Gastos
+{% endblock  %}
+
+{% block container %}
+
+    <div class="row" style="margin-top: 3%">
+        <!-- formulario -->
+        <div class="col s3">
+            {% if p %}
+
+            {% else %}
+            <form action="{% url 'Gastos:registrar_gasto' %}" method="post">
+            {% endif %}
+            
+            {% if messages %}
+            {% for message in messages %}
+                <div id="login-error" class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+                {% csrf_token %}
+                <div class="mb-3">
+                    <div class="input-field col s12" required autofocus>
+                        <select class="form-control"  name="tipo" id="tipo">
+                            <option value="" disabled selected>Escoja un tipo de gasto</option>
+                            {% for p in TipoGasto %}
+                                <option value="{{ p.id }}">{{ p.Tipo }}</option>
+                            {% empty %}
+
+                            {% endfor %}
+                        </select>
+                        <label>Tipo de gasto</label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="input-field col s12"  required autofocus>
+                        <select class="form-control" name="fuente" id="fuente">
+                            <option value="" disabled selected>Escoja una fuente</option>
+                            {% for d in Fuente %}
+                                <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo}}</option>
+                            {% empty %}
+
+                            {% endfor %}
+                        </select>
+                        <label>Fuentes</label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="input-field col s12">
+                        <input placeholder="Ingrese un monto" value="{{ g.monto }}" name="monto" id="monto" type="number" class="validate" required>
+                        <label for="monto">Monto</label>
+                    </div>
+                </div>
+                
+
+                <div class="mb-3">
+                    {% if p %}
+                    <input type="submit" class="btn btn-success" value="Actualizar participante">
+                    {% else %}
+                    <input type="submit" class="btn btn-success" value="Registrar Gasto">
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="col s9">
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Fuente</th>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in Gasto %}
+                    <tr>
+                        <td>{{ g.Fuente.Fuente }}</td>
+                        <td>{{ g.Fecha_Registro }}</td>
+                        <td>{{ g.Tipo }}</td>
+                        <td>{{ g.Monto }}</td>
+                        <td class="text-center">
+                            <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'Gastos:eliminar_gasto' g.id g.Fuente.id g.Monto %}" class="text-danger"><i class="Small material-icons">delete</i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% block js %}
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+    </script>
+    {% endblock js %}
+{% endblock  %}
