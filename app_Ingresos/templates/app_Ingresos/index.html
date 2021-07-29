@@ -7,24 +7,27 @@
 {% block container %}   
     <div class="row" action="">
         <div class="col s12 l3">
-            <form>
+            <form action="{% url 'Ingresos:about' %}" method="post">>
                 {% csrf_token %}
                 <div>
                     <label>Fuente</label>
                      <select >
-                        {% for f in Fuentes %}
-                            <option value="{{f.id}}">Fuente: {{ f.Fuente }} - {{ f.Saldo }}</option>
+                        {% for f in Fuente %}
+                            <option name="Fuente" value="{{f.id}}">Fuente: {{ f.Fuente }} - {{ f.Saldo }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
                     <label>Fecha Registro</label>
-                    <input type="date" name="fecha_registro" id="start" name="trip-start" value="2020-07-10">
+                    <input type="date" name="fecha" id="start" name="trip-start" value="2020-07-10">
                 </div>
                 <div>
                     <label>Monto</label>
                     <input id="Monto" name="Monto" type="number"  class="validate"/>
                 </div>
+                <button style="background-color: blueviolet;" class="btn waves-effect waves-light" type="submit">Guardar
+                    <i class="material-icons right" >keyboard_arrow_right</i>
+                </button>
         </div>
         <div class="col s12 l8">
             <table class="table table-hover">
