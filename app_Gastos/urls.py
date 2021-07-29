@@ -9,5 +9,6 @@ app_name = 'Gastos'
 urlpatterns = [
     path('', views.index, name='index'),
     path('registrar/', views.registrar_gasto, name="registrar_gasto"),
+    path('registrar/<int:id>/actualizar/', views.actualizar_gasto, name="actualizar_gasto"),
     path('registrar/<int:id>/<int:idFuente>/<int:monto>/eliminar/', views.eliminar_gasto, name='eliminar_gasto'),
 ]
