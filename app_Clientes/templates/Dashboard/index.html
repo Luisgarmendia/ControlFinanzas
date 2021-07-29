@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block container %}
     <div class="row">
-        <h1>Son las {% now "SHORT_DATETIME_FORMAT" %}</h1>
         <div class="col s12 l5">
             
                 <label>Fuente</label>
@@ -13,11 +12,11 @@
             
             <div>
                 <label>Fecha Inicial</label>
-                <input type="date" name="Fecha" id="start" name="trip-start" value="2021-06-29"/>
+                <input type="date" name="Fecha" id="start" name="trip-start" value="{% now 'Y-m-d' %}"/>
             </div>
             <div>
                 <label>Fecha Final</label>
-                <input type="date" name="Fecha" id="start" name="trip-start" value="2021-07-29"/>
+                <input type="date" name="Fecha" id="end" name="trip-start" value="{% now 'Y-m-d' %}"/>
             </div>
             
             <figure class="highcharts-figure">
