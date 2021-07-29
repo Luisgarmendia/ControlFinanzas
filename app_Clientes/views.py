@@ -4,11 +4,19 @@ from .models import Cliente
 #importar login required para evitar acceso no autorizado
 from django.contrib.auth.decorators import login_required
 
-
-
+#Importacion temporales para visualización de data en combobox (borrar)
+from django.db.models import Sum
+from app_Fuente_Dinero.models import FuenteDinero 
 @login_required
 def index(request):
-    return render(request, 'Clientes/index.html', {})
+    #Data temporal para visualización de data en combobox (borrar)
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    FuentesD = FuenteDinero.objects.filter(Cliente = request.user.cliente)
+    ctx={
+        "Saldo":Saldo.get('Saldo__sum'),
+        "Fuentes":FuentesD,
+    }
+    return render(request, 'Dashboard/index.html', ctx)
     
 @login_required
 def clientes(request):    

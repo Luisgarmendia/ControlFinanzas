@@ -4,29 +4,32 @@
 {% block container %}
 <div class="row">
     <div class="col s12 l3">
-        <form  method="post">
+        {% if f %}
+        <form action="{% url 'FuenteDinero:edit' f.id %}" method="post">
+        {% else %}
+        <form action="{% url 'FuenteDinero:create' %}" method="post">
+        {% endif %}
             {% csrf_token %}
             <h4> {% if requesf.user.is_staff %}  {{request.user}} {% else %} {{request.user.cliente  }} {% endif %}</h4>
             <h4> {% if not request.user.is_staff %} Saldo Total: {{Saldo}} {% endif %}</h4>
                 
             <div>
-                <label>Fecha</label>
-                <input type="date" name="fecha_creacion" id="start" name="trip-start" value="2020-07-10">
+                <input value="{{f.Fuente}}" placeholder="Fuente" id="Fuente" name="Fuente" type="text" class="validate"/>
             </div>
             <div>
-                <input placeholder="Remitente" id="name" name="nombre_remitente" type="text" class="validate"/>
+                <input value="{{f.Saldo}}" placeholder="Saldo" id="Saldo" name="Saldo" type="text" class="validate"/>
             </div>
-            {% if request.user.is_staff == False %}
-                <div>
-                    <input placeholder="Cuenta Destino" id="name" name="cuentaDestino" type="text" class="validate"/>
-                </div>
-            {% endif %}
-            <div>
-                <input placeholder="Cantidad" id="cantidad" name="cantidad" type="text" class="validate"/>
+            <div class="mb-3">
+                {% if f %}
+                <button style="background-color: #EE6E73;" class="btn waves-effect waves-light" type="submit">Actualizar
+                        <i class="material-icons right" >keyboard_arrow_right</i>
+                </button>
+                {% else %}
+                <button style="background-color: #EE6E73;" class="btn waves-effect waves-light" type="submit">Registrar
+                        <i class="material-icons right" >keyboard_arrow_right</i>
+                </button>
+                {% endif %}
             </div>
-            <button style="background-color: blueviolet;" class="btn waves-effect waves-light" type="submit">Guardar
-                    <i class="material-icons right" >keyboard_arrow_right</i>
-            </button>
         </form>
     </div>
     <div class="col s12 l8">
@@ -36,6 +39,7 @@
                     <th>Fecha</th>
                     <th>Fuente</th>
                     <th>Saldo</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +48,10 @@
                     <td>{{ f.Fecha_Registro }}</td>
                     <td>{{ f.Fuente }}</td>
                     <td>{{ f.Saldo }}</td>
+                    <td class="text-center">
+                        <a onclick="if (!confirm('Confirme la eliminación')) return false;" href="{% url 'FuenteDinero:delete' f.id %}" class="text-danger"><i class="material-icons" style="color:#EE6E73;">delete</i></a>
+                        <a href="{% url 'FuenteDinero:edit' f.id %}" class="text-success"><i class="material-icons">autorenew</i></a> 
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

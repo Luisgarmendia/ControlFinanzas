@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from app_Ingresos.models import Ingreso 
 from app_Fuente_Dinero.models import FuenteDinero
@@ -24,7 +24,9 @@ def create(request):
         Fecha =  request.POST.get('Fecha')
         Monto = request.POST.get('Monto')
         
-        IngresoD = Ingreso(Fuente=Fuente,Fecha=Fecha,Monto=Monto)
+        Fuente.Saldo = Fuente.Saldo + int(Monto)
+        Fuente.save()
+        IngresoD = Ingreso(Fuente=Fuente,Fecha_Registro=Fecha,Monto=Monto)
         IngresoD.save()
     Fuentes = FuenteDinero.objects.filter(Cliente = request.user.cliente)
-    return render(request, 'app_Ingresos/index.html', {"Fuentes":Fuentes})
+    return redirect('/ingresos/')
