@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Clientes/',include('app_Clientes.urls')),# URL CLIENTES
     path('Gastos/',include('app_Gastos.urls')),# URL GASTOS
+    path('Estadisticas/',include('app_Estadisticas.urls')),# URL ESTADISTICAS
     path('',include('app_login.urls')),# URL Login
     path('FuenteDinero/',include('app_Fuente_Dinero.urls')),# URL FuenteDinero
     
