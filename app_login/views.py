@@ -51,7 +51,7 @@ def log_in(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse('app_Clientes:index'))
+            return redirect(reverse('Clientes:index'))
         else:
             messages.add_message(request, messages.ERROR, 'El usuario/contraseña inválidos o la cuenta está desactivada')
             return redirect('/')
