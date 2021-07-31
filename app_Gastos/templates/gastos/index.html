@@ -26,7 +26,6 @@
                 <div class="mb-3">
                     <div class="input-field col s12" required autofocus>
                         <select class="form-control"  name="tipo" id="tipo">
-                            <option disabled selected>Escoja un tipo de gasto</option>
                             {% for p in TipoGasto %}
                                 
                                 {% if GastoActual.Tipo.id == p.id %}
@@ -46,7 +45,6 @@
                 <div class="mb-3">
                     <div class="input-field col s12"  required autofocus>
                         <select class="form-control" name="fuente" id="fuente">
-                            <option disabled selected>Escoja una fuente</option>
                             {% for d in Fuente %}
                                 
                                 {% if GastoActual.Fuente.id == d.id %}

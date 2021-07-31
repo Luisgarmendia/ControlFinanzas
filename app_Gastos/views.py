@@ -31,15 +31,21 @@ def registrar_gasto(request):
         monto = int(request.POST.get('monto'))
         idFuente = request.POST.get('fuente')
         tipoGasto = TipoGasto.objects.get(id=tipo)
-        fuente = FuenteDinero.objects.get(id=idFuente)
-        if fuente.Saldo > monto:
-            fuente.Saldo = fuente.Saldo - monto
-            fuente.save()
-            p = Gasto(Fuente=fuente,Fecha_Registro=hoy,Tipo=tipoGasto, Monto=monto)
-            p.save()
-            messages.add_message(request, messages.ERROR, 'Se ha registrado su gasto.')
+        if idFuente:
+            fuente = FuenteDinero.objects.get(id=idFuente)
+            if monto > 0:
+                if fuente.Saldo > monto :
+                    fuente.Saldo = fuente.Saldo - monto
+                    fuente.save()
+                    p = Gasto(Fuente=fuente,Fecha_Registro=hoy,Tipo=tipoGasto, Monto=monto)
+                    p.save()
+                    messages.add_message(request, messages.ERROR, 'Se ha registrado su gasto.')
+                else:
+                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')
+            else:
+                messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
         else:
-            messages.add_message(request, messages.ERROR, 'El saldo es insuficiente.')
+            messages.add_message(request, messages.ERROR, 'Debe seleccionar una fuente')
         
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     ctx = {
@@ -84,8 +90,14 @@ def actualizar_gasto(request, id):
                     gasto.Monto = monto
                     gasto.save()
                     messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
+                elif monto == monto_antiguo:
+                    gasto.Fuente = fuente
+                    gasto.Tipo = tipoGasto
+                    gasto.Monto = monto
+                    gasto.save()
+                    messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'El saldo es insuficiente.')   
+                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')   
             elif fuente != gasto.Fuente:
                 if fuente.Saldo > monto:
                     fuente_antigua.Saldo += monto_antiguo
@@ -98,11 +110,11 @@ def actualizar_gasto(request, id):
                     gasto.save()
                     messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'El saldo es insuficiente')
+                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente')
             else:
                 messages.add_message(request, messages.ERROR, 'Error desconocido')
         else:
-            messages.add_message(request, messages.ERROR, 'El monto es cero.')
+            messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
 
         return redirect(reverse('Gastos:index'))
     else:
