@@ -2,33 +2,25 @@
 {% block container %}
     <div class="row">
         <div class="col s12 l12">
-            
-                <label>Fuente</label>
-                 <select name="Fuente">
-                    {% for f in Fuentes %}
-                        <option value="{{f.id}}">Fuente: {{ f.Fuente }} - {{ f.Saldo }}</option>
-                    {% endfor %}
-                </select>
-            
-            <div>
+            <label>Fuente</label>
+                <select name="Fuente">
+                {% for f in Fuentes %}
+                    <option value="{{f.id}}">Fuente: {{ f.Fuente }} - {{ f.Saldo }}</option>
+                {% endfor %}
+            </select>
+        <div class="row">
+            <div class="col s12 l6">
                 <label>Fecha Inicial</label>
                 <input type="date" name="Fecha" id="start" name="trip-start" value="{% now 'Y-m-d' %}"/>
             </div>
-            <div>
+            <div class="col s12 l6">
                 <label>Fecha Final</label>
                 <input type="date" name="Fecha" id="end" name="trip-start" value="{% now 'Y-m-d' %}"/>
             </div>
-            
-            <figure class="highcharts-figure">
-                <div id="container">
-                    <p class="highcharts-description">
-                        Filtro por fecha
-                    </p>
-                </div>
-            </figure>
         </div>
-        
-        <div class="col s12 l7">
+    </div>
+    <div class="row">
+        <div class="col s12 l6">
             <table>
                 <thead>
                     <tr>
@@ -54,8 +46,16 @@
                 </tbody>
             </table>
         </div>
+        <div class="col s12 l6">
+            <figure class="highcharts-figure">
+                <div id="container">
+                    <p class="highcharts-description">
+                        Filtro por fecha
+                    </p>
+                </div>
+            </figure>
+        </div>
     </div>
-    
 {% endblock %}
     
     
