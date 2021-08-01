@@ -5,12 +5,14 @@ from app_Clientes.models import Cliente
 from datetime import datetime
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 #IMPORTAR MODELO de fuente dinero
 
 
 # Create your views here.
 
 #crear la vista de index
+@login_required
 def index(request):
     cliente = Cliente.objects.get(Usuario = request.user)
     fuente =  FuenteDinero.objects.filter(Cliente=cliente)
@@ -20,6 +22,7 @@ def index(request):
     return render(request, 'RegistroFuente/index.html',ctx)
 
 #crear la vista de edit
+@login_required
 def editar(request,id):
     FuenteD = get_object_or_404(FuenteDinero, pk=id)
     cliente = Cliente.objects.get(Usuario = request.user)
@@ -42,7 +45,7 @@ def editar(request,id):
         }
         return render(request, 'RegistroFuente/index.html' , ctx)
 #crear la vista de edit
-
+@login_required
 def registrar(request):
     if request.method == 'POST':
          
@@ -65,6 +68,7 @@ def registrar(request):
 
 
 #crear vita de delete
+@login_required
 def eliminar(request,id):
     FuenteDinero.objects.get(pk=id).delete()
     return redirect(reverse('FuenteDinero:index'))

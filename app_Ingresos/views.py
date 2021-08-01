@@ -4,8 +4,10 @@ from app_Fuente_Dinero.models import FuenteDinero
 from datetime import datetime
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def index(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
@@ -15,6 +17,7 @@ def index(request):
     }
     return render(request, 'Ingresos/index.html', ctx)
 
+@login_required
 def registrar_ingreso(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
@@ -47,7 +50,7 @@ def registrar_ingreso(request):
     }
     return render(request, 'Ingresos/index.html',ctx)
 
-
+@login_required
 def actualizar_ingreso(request, id):
     ingreso = Ingreso.objects.get(pk=id)
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
@@ -114,7 +117,7 @@ def actualizar_ingreso(request, id):
         return render(request, 'Ingresos/index.html', ctx)
 
 
-
+@login_required
 def eliminar_ingreso(request, id,idFuente, monto):
     Ingreso.objects.get(pk=id).delete()
     montoRecuperado = monto

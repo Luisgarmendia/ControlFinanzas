@@ -6,9 +6,10 @@ from .models import Gasto, TipoGasto
 from datetime import datetime
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def index(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = TipoGasto.objects.all()
@@ -20,6 +21,7 @@ def index(request):
     }
     return render(request, 'gastos/index.html',ctx)
 
+@login_required
 def registrar_gasto(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = TipoGasto.objects.all()
@@ -57,6 +59,7 @@ def registrar_gasto(request):
     }
     return render(request, 'gastos/index.html',ctx)
 
+@login_required
 def actualizar_gasto(request, id):
     gasto = Gasto.objects.get(pk=id)
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
@@ -130,6 +133,7 @@ def actualizar_gasto(request, id):
     
         return render(request, 'Gastos/index.html', ctx)
 
+@login_required
 def eliminar_gasto(request, id,idFuente, monto):
     Gasto.objects.get(pk=id).delete()
     montoRecuperado = monto

@@ -5,7 +5,9 @@ from app_Gastos.models import Gasto, TipoGasto
 from app_Ingresos.models import Ingreso
 from django.db.models import Sum
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     labels = []
     data = []
