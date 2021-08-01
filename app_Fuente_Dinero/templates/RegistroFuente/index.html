@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Fuentes de Dinero{% endblock title %}
+
+{% block container %}
+<div class="row" style="margin-top: 3%">
+    <div class="col s3">
+        {% if FuenteActual %}
+        <form action="{% url 'FuenteDinero:editar' FuenteActual.id%}" method="post">
+        {% else %}
+        <form action="{% url 'FuenteDinero:registrar' %}" method="post">
+        {% endif %}
+
+        {% if messages %}
+            <div class="alert alert-success mb-2">
+            {% for message in messages %}
+                {{ message|safe }}
+            {% endfor %}
+            </div>
+        {% endif %}
+            {% csrf_token %}
+           
+            <div class="mb-3">
+                <div class="input-field col s12"  required autofocus>
+                    <input placeholder="Nombre de la Fuente" value="{{FuenteActual.Fuente}}" name="nombre" id="nombre" type="text" class="validate" required>
+                    <label>Nombre de la fuente</label>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="input-field col s12">
+                    <input placeholder="Ingrese un monto" value="{{FuenteActual.Saldo}}" name="monto" id="monto" type="number" class="validate" required>
+                    <label for="monto">Monto</label>
+                </div>
+            </div>
+            
+
+            <div class="mb-3">
+                {% if FuenteActual %}
+                <input type="submit" class="btn btn-success" value="Actualizar Gasto">
+                {% else %}
+                <input type="submit" class="btn btn-success" value="Registrar Gasto">
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div class="col s9">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Fuente</th>
+                    <th>Saldo</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in fuentes %}
+                <tr>
+                    <td>{{ f.Fecha_Registro }}</td>
+                    <td>{{ f.Fuente }}</td>
+                    <td class="right-align money">{{ f.Saldo }}</td>
+                    <td class="center-align">
+                        <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'FuenteDinero:eliminar' f.id %}" class="text-danger"><i class="Small material-icons">delete</i></a>
+                        <a href="{% url 'FuenteDinero:editar' f.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% block js %}
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+        
+        $(function () {
+        
+            setTimeout(() => {
+                $('.alert').slideUp(function () {
+                    $(this).remove();
+                });
+            }, 3000)
+
+        });
+    </script>
+{% endblock js %}
+{% endblock container %}

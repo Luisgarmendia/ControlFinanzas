@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse
-from Clientes.models import Cliente
+from app_Clientes.models import Cliente
 from django.contrib.auth.models import User
 
 def index(request):

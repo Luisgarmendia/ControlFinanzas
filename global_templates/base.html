@@ -8,31 +8,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'global/css/materialize.min.css' %}">
     <link rel="stylesheet" href="{% static 'global/css/icon.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/dataTable/datatables.min.css' %}">
     <title>{% block title %}{% endblock title %}</title>
     {% block css %}{% endblock css %}
 </head>
 <body>
-    <script src="{% static 'js/materialize.min.js' %}"></script>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/custon.js' %}"></script>
+    <script src="{% static 'global/js/jquery.min.js' %}"></script>
+    <script src="{% static 'global/js/materialize.min.js' %}"></script>
+    <script src="{% static 'plugins/dataTable/datatables.min.js' %}"></script>
+    <script src="{% static 'global/js/custon.js' %}"></script>
     <nav>
       <div class="nav-wrapper container">
-        <a href="{% url 'finanzas:index' %}" class="brand-logo"><i class="material-icons">cloud
-          </i>{% if request.user.is_staff == False %} {{ request.user.customer.apellido }}, {{ request.user.customer.nombre }} {% endif %}</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="{% url 'finanzas:transacciones' %}">Transacciones</a></li>
-          {% if request.user.is_staff == False %}
-          <li><a href="{% url 'finanzas:cuentas' %}">Estado Cuenta</a></li>
-          {% endif %}
-          <li><a href="{% url 'logout_view' %}">Salir</a></li>
+        
+        <a href="#" class="brand-logo">Hola</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="">Home</a></li>
 
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+          <li><a href="{% url 'app_login:logout_view' %}">LogOut</a></li>
         </ul>
+
       </div>
     </nav>
     <div class="container">
       {% block container %}
 
       {% endblock container %}
+
+    </div >
+
+    <div class="container">
+    
+    {% comment %} <table class="display">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>nombre</th>
+            <th>Perro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div> {% endcomment %}
+      
     </div>
   {% block js %}{% endblock js %}
 </body>

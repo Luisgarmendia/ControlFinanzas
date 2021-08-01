@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Ingresos
+{% endblock  %}
+
+{% block container %}
+
+    <div class="row" style="margin-top: 3%">
+        <!-- formulario -->
+        <div class="col s3">
+            {% if IngresoActual %}
+            <form action="{% url 'Ingresos:actualizar_ingreso' IngresoActual.id %}" method="post">
+            {% else %}
+            <form action="{% url 'Ingresos:registrar_ingreso' %}" method="post">
+            {% endif %}
+            
+
+            {% if messages %}
+                <div class="alert alert-success mb-2">
+                {% for message in messages %}
+                    {{ message|safe }}
+                {% endfor %}
+                </div>
+            {% endif %}
+                {% csrf_token %}
+                <div class="mb-3">
+                    <div class="input-field col s12"  required autofocus>
+                        <select class="form-control" name="fuente" id="fuente">
+                            {% for d in Fuente %}
+                                {% if IngresoActual.Fuente.id == d.id %}
+                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo}}</option>
+                                {% else %}
+                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo}}</option>
+                                {% endif %}
+                            {% empty %}
+
+                            {% endfor %}
+                        </select>
+                        <label>Fuentes</label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="input-field col s12">
+                        <input placeholder="Ingrese un monto" value="{{ IngresoActual.Monto }}" name="monto" id="monto" type="number" class="validate" required>
+                        <label for="monto">Monto</label>
+                    </div>
+                </div>
+                
+
+                <div class="mb-3">
+                    {% if IngresoActual %}
+                    <input type="submit" class="btn btn-success" value="Actualizar Ingreso">
+                    {% else %}
+                    <input type="submit" class="btn btn-success" value="Registrar Ingreso">
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="col s9">
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Fuente</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in Ingreso %}
+                    <tr>
+                        <td>{{ i.Fuente.Fuente }}</td>
+                        <td>{{ i.Fecha_Registro }}</td>
+                        <td>{{ i.Monto }}</td>
+                        <td class="text-center">
+                            <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'Ingresos:eliminar_ingreso' i.id i.Fuente.id i.Monto %}" class="text-danger"><i class="Small material-icons">delete</i></a>
+                            <a href="{% url 'Ingresos:actualizar_ingreso' i.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% block js %}
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+        
+        $(function () {
+        
+            setTimeout(() => {
+                $('.alert').slideUp(function () {
+                    $(this).remove();
+                });
+            }, 3000)
+    
+        });
+    </script>
+    {% endblock js %}
+{% endblock  %}

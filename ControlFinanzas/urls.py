@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from app_login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Clientes/',include('Clientes.urls')),# URL CLIENTES
-    path('',views.index),
-    path('registro/',views.registro_cliente,name="registro_cliente"),#URL DE REGISTRO DE USUARIOS DE LA APLICACION LOGIN
-    path('login/',views.log_in,name='login_view'),#URL LOGIN
-    path('logout/',views.log_out,name='logout_view'),#URL LOGOUT
+    path('Clientes/',include('app_Clientes.urls')),# URL CLIENTES
+    path('Gastos/',include('app_Gastos.urls')),# URL GASTOS
+    path('Ingresos/',include('app_Ingresos.urls')),
+    path('Estadisticas/',include('app_Estadisticas.urls')),# URL ESTADISTICAS
+    path('',include('app_login.urls')),# URL Login
+    path('FuenteDinero/',include('app_Fuente_Dinero.urls')),# URL FuenteDinero
+    
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Cuenta{% endblock title %}
+
+
+{% block container %}
+<div class="row" style="margin-top: 5%;">
+    
+    <main>
+        <form class="col s12" action="{% url 'Clientes:adminCuenta' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="input-field col s6" data-validate = "Enter name">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input class="validate" type="text" name="nombre" id="nombre" value="{{cliente.Nombre}}" placeholder="Nombre" required>
+                    <label for="nombre">Nombre</label>
+                </div>
+    
+                <div class="input-field col s6" data-validate="Enter lastname">
+                    <i class="material-icons prefix">account_circle</i>
+                    <label for="apellido">Apellido</label>
+                    <input class="input100" type="text" name="apellido" id="apellido" value="{{cliente.Apellido}}" placeholder="Apellido" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6" data-validate = "Enter username">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input class="validate" type="text" name="usuario" id="usuario" value="{{cliente.Usuario.username}}" placeholder="Usuario" required>
+                    <label for="usuario">Usuario</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6" data-validate="Enter password">
+                    <i class="material-icons prefix">lock</i>
+                    <input class="" type="password" name="contra" id="contra" placeholder="Nueva contraseña">
+                    <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                </div>
+    
+                <div class="input-field col s6" data-validate="Enter password">
+                    <i class="material-icons prefix">lock_open</i>
+                    <input class="" type="password" name="confirmar" id="confirmar" placeholder="Confirmar contraseña">
+                    <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                </div>
+            </div>
+
+            <!-- <div class="checkbox mb-3">
+                <label style="padding-left: 35%; padding-top: 3%;">
+                    <input type="checkbox" value="remember-me"> Recordarme
+                </label>
+            </div> -->
+            <div class="row">
+                {% if messages %}
+                {% for message in messages %}
+                    <p class="" style="color:firebrick; padding-top: 3%; padding-left: 2%;">{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+                <div class="input-field">
+                    <button class="waves-effect waves-light btn" type="submit">Guardar Cambios</button>
+                </div>
+            </div>
+            
+            
+
+        </form>
+    </main>
+        
+    
+</div>
+{% endblock container %}

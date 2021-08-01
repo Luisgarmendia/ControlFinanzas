@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_login', # SE BORRO LOGIN -> SE AGREGO 'app_login'
-    'Clientes',
+    'app_Fuente_Dinero',
+    'app_Clientes',
+    'app_Gastos',
+    'app_Ingresos',
+    'app_Estadisticas',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +60,7 @@ ROOT_URLCONF = 'ControlFinanzas.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'static/global_templates'],# SE AGREGA LA DIRECCION DE LA PLANTILLA GLOBAL A 'static/global_templates'
+        'DIRS': [BASE_DIR / 'global_templates'],# SE AGREGA LA DIRECCION DE LA PLANTILLA GLOBAL A 'static/global_templates'
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
