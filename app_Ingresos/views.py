@@ -53,6 +53,7 @@ def actualizar_ingreso(request, id):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
 
+    fuente_antigua = ingreso.Fuente
     monto_antiguo = ingreso.Monto
 
     if request.method == 'POST':
@@ -63,27 +64,41 @@ def actualizar_ingreso(request, id):
 
         if monto > 0:
             if fuente == ingreso.Fuente:
-                if monto > monto_antiguo and fuente.Saldo > monto:
+                if monto > monto_antiguo:
                     fuente.Saldo += monto - monto_antiguo
                     fuente.save()
                     ingreso.Fuente = fuente
                     ingreso.Monto = monto
                     ingreso.save()
-                    messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
-                elif monto < monto_antiguo and fuente.Saldo > monto:
+                    messages.add_message(request, messages.ERROR, 'Su ingreso se ha actualizado.')
+                elif monto < monto_antiguo:
                     fuente.Saldo -= monto_antiguo - monto
                     fuente.save()
                     ingreso.Fuente = fuente
                     ingreso.Monto = monto
                     ingreso.save()
-                    messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
+                    messages.add_message(request, messages.ERROR, 'Su ingreso se ha actualizado.')
                 elif monto == monto_antiguo:
                     ingreso.Fuente = fuente
                     ingreso.Monto = monto
                     ingreso.save()
-                    messages.add_message(request, messages.ERROR, 'Su gasto se ha actualizado.')
+                    messages.add_message(request, messages.ERROR, 'Su ingreso se ha actualizado.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')   
+                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')
+            elif fuente != ingreso.Fuente:
+                if fuente_antigua.Saldo > monto:
+                    fuente_antigua.Saldo -= monto_antiguo
+                    fuente.Saldo += monto
+                    fuente_antigua.save()
+                    fuente.save()
+                    ingreso.Fuente = fuente
+                    ingreso.Monto = monto
+                    ingreso.save()
+                    messages.add_message(request, messages.ERROR, 'Su ingreso se ha actualizado.')
+                else:
+                    messages.add_message(request, messages.ERROR, 'El monto de la cuenta actual es insuficiente')
+            else:
+                messages.add_message(request, messages.ERROR, 'Error desconocido')   
         else:
             messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
 
