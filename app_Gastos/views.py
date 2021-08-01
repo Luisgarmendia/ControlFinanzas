@@ -44,6 +44,8 @@ def registrar_gasto(request):
                     messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')
             else:
                 messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
+            
+            return redirect(reverse('Gastos:index'))
         else:
             messages.add_message(request, messages.ERROR, 'Debe seleccionar una fuente')
         
