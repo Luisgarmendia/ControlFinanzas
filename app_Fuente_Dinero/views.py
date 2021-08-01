@@ -1,6 +1,10 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, render,redirect
 from app_Fuente_Dinero.models import FuenteDinero 
-
+from app_Clientes.models import Cliente
+from datetime import datetime
+from django.contrib import messages
+from django.urls import reverse
 #IMPORTAR MODELO de fuente dinero
 
 
@@ -8,47 +12,59 @@ from app_Fuente_Dinero.models import FuenteDinero
 
 #crear la vista de index
 def index(request):
-
-    return render(request, 'app_Fuente_Dinero/index.html')
-
-#crear la vista de edit
-def edit(request,id):
-    FuenteD = get_object_or_404(FuenteDinero, pk=id)
-
-    if request.method == 'POST':
-        Cliente = request.User.Cliente 
-        Fecha = request.POST.get('Fecha')
-        Fuente = request.POST.get('Fuente')
-        Saldo = request.POST.get('Saldo')
-        
-        FuenteD.Cliente=Cliente
-        FuenteD.Fecha_Registro=Fecha
-        FuenteD.Fuente=Fuente
-        FuenteD.Saldo=Saldo
-        
-        FuenteD.save()
-
-    ctx={
-        "Fuente":FuenteD
+    cliente = Cliente.objects.get(Usuario = request.user)
+    fuente =  FuenteDinero.objects.filter(Cliente=cliente)
+    ctx = {
+        'fuentes':fuente
     }
-    return render(request, 'app_Fuente_Dinero/index.html' , ctx)
+    return render(request, 'RegistroFuente/index.html',ctx)
+
+#crear la vista de edit
+def editar(request,id):
+    FuenteD = get_object_or_404(FuenteDinero, pk=id)
+    cliente = Cliente.objects.get(Usuario = request.user)
+    fuente =  FuenteDinero.objects.filter(Cliente=cliente)
+    if request.method == 'POST':
+        Fuente = request.POST.get('nombre')
+        Saldo = int(request.POST.get('monto'))
+        
+        if Saldo > 0:
+            FuenteD.Fuente=Fuente
+            FuenteD.Saldo=Saldo
+            FuenteD.save()
+        else:
+            messages.add_message(request, messages.ERROR, 'No se ha ingresado un monto correcto.')
+        return redirect(reverse('FuenteDinero:index'))
+    else:
+        ctx={
+            "FuenteActual":FuenteD,
+            'fuentes':fuente,
+        }
+        return render(request, 'RegistroFuente/index.html' , ctx)
 #crear la vista de edit
 
-def create(request):
+def registrar(request):
     if request.method == 'POST':
-        Cliente = request.User.Cliente 
-        Fecha = request.POST.get('Fecha')
-        Fuente = request.POST.get('Fuente')
-        Saldo = request.POST.get('Saldo')
-        
-        FuenteD = FuenteDinero(Cliente=Cliente,Fecha_Registro=Fecha,Fuente=Fuente,Saldo=Saldo)
-        FuenteD.save()
+         
+        cliente =  Cliente.objects.get(Usuario = request.user)
+        Fecha = datetime.now().date()
+        fuente = request.POST.get('nombre')
+        saldo = int(request.POST.get('monto'))
+        fuentes_exist =  FuenteDinero.objects.filter(Fuente = fuente).count()
 
+        if not fuentes_exist:
+            if saldo > 0:
+                FuenteD = FuenteDinero(Cliente=cliente,Fecha_Registro=Fecha,Fuente=fuente,Saldo=saldo)
+                FuenteD.save()
+            else:
+                messages.add_message(request, messages.ERROR, 'No se ha ingresado un monto correcto.')
+        else:
+            messages.add_message(request, messages.ERROR, 'Ya existe una fuente con ese nombre.')
 
-    return render(request, 'app_Fuente_Dinero/index.html')
+    return redirect(reverse('FuenteDinero:index'))
 
 
 #crear vita de delete
-def delete(request,id):
+def eliminar(request,id):
     FuenteDinero.objects.get(pk=id).delete()
-    return render(request, 'app_Fuente_Dinero/index.html')
+    return redirect(reverse('FuenteDinero:index'))

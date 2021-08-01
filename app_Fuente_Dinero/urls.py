@@ -5,9 +5,9 @@ from . import views
 app_name = 'FuenteDinero'
 
 urlpatterns = [
-    path('',views.index),
-    path('create/',views.create, name='create'),
-    path('edit/<int:id>',views.edit , name='edit'),
-    path('delete/<int:id>',views.delete , name='delete'),
+    path('',views.index,name="index"),
+    path('registrar/',views.registrar, name='registrar'),
+    path('editar/<int:id>',views.editar , name='editar'),
+    path('eliminar/<int:id>',views.eliminar , name='eliminar'),
 
 ]

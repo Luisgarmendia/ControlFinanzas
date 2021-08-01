@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect(reverse('app_Clientes:index'))
+        return redirect(reverse('Clientes:index'))
 
     return render(request, 'login/index.html')
 
