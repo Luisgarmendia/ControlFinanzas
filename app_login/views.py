@@ -6,10 +6,13 @@ from django.contrib import messages
 from django.urls import reverse
 from app_Clientes.models import Cliente
 from django.contrib.auth.models import User
+#importar login requerido
+
+
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect(reverse('app_Clientes:index'))
+        return redirect(reverse('app_login:dashboard'))
 
     return render(request, 'login/index.html')
 
@@ -43,6 +46,7 @@ def registro_cliente(request):
         return(render(request,'login/registro.html'))
 
 def log_in(request):
+    print(request.POST)
     if request.method == 'POST':
         username = request.POST.get('usuario')
         password = request.POST.get('contrasena')
@@ -51,15 +55,23 @@ def log_in(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse('app_Clientes:index'))
+            return redirect(reverse('app_login:dashboard'))
         else:
             messages.add_message(request, messages.ERROR, 'El usuario/contraseña inválidos o la cuenta está desactivada')
-            return redirect('/')
+            return reverse('login/')
 
     else:
-        return redirect('/')
+        return redirect(reverse('app_login:index'))
 
 
 def log_out(request):
     logout(request)
-    return redirect('/')
+    return redirect(reverse('app_login:index'))
+#login es requerido 
+# 
+def dashboard(request):
+    if request.user.is_authenticated:
+        return(render(request,'dashboard.html'))
+    else:
+        return redirect(reverse('app_login:index'))
+    
