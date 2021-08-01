@@ -5,36 +5,270 @@
 {% endblock  %}
 
 {% block container %}
-
-    <div class='row'>
-        <canvas id="pie-chart"></canvas>
+    <div style="margin-top: 3%">
+        <form action="{% url 'Estadisticas:index' %}" method="post">
+            <div class='row'>
+                {% csrf_token %}
+                <div class="col s6">
+                    <div class="input-field col s12"  required autofocus>
+                        <select class="form-control" name="tipos" id="tipos" onchange="function(){this.form.submit()}">
+                            {% if filtro == "1" %}
+                                <option value="1" selected>Informe Gastos</option>
+                                <option value="2">Informe Fuentes</option>
+                                <option value="3">Informe Detallado</option>
+                                <option value="4">Informe Mensual</option>
+                            {% elif filtro == "2" %}
+                                <option value="1" >Informe Gastos</option>
+                                <option value="2" selected>Informe Fuentes</option>
+                                <option value="3">Informe Detallado</option>
+                                <option value="4">Informe Mensual</option>
+                            {% elif filtro == "3" %}
+                                <option value="1" >Informe Gastos</option>
+                                <option value="2">Informe Fuentes</option>
+                                <option value="3" selected>Informe Detallado</option>
+                                <option value="4">Informe Mensual</option>
+                            {% else %}
+                                <option value="1" >Informe Gastos</option>
+                                <option value="2">Informe Fuentes</option>
+                                <option value="3">Informe Detallado</option>
+                                <option value="4" selected>Informe Mensual</option>
+                            {% endif %}
+                        </select>
+                        <label>Tipos de Datos</label>
+                    </div>
+                    <div class="input-field col s12"  required autofocus>
+                        <select class="form-control" name="busqueda" id="busqueda" onchange="function(){this.form.submit()}">
+                            {% if busqueda == '1' %}
+                                <option value="1" selected>Busqueda por mes y año</option>
+                                <option value="2">Busqueda por año</option>
+                            {% else %}
+                                <option value="1">Busqueda por mes y año</option>
+                                <option value="2" selected>Busqueda por año</option>
+                            {% endif %}
+                            
+                        </select>
+                        <label>Tipos de Datos</label>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <label>Fecha Inicial</label>
+                    <div class='input-field'>
+                        <input type="month" name="inicio" id="inicio" name="inicio" value="2020-07-10">
+                    </div>
+                    <input type="submit" class="btn btn-success" value="Cargar Datos">
+                </div>
+            </div>
+        </form>
     </div>
+
+    {% if filtro == '1'%}
+        <div class="row">
+            <div class="col s6">
+                <table class="striped display">
+                    <thead>
+                        <tr>
+                            <th>Fuente</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Egresos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in Gasto %}
+                        <tr>
+                            <td>{{ g.Fuente.Fuente }}</td>
+                            <td>{{ g.Fecha_Registro }}</td>
+                            <td>{{ g.Tipo }}</td>
+                            <td>{{ g.Monto }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s6">
+                <div class='row'>
+                    <canvas id="pie-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    {% elif filtro == '2'%}
+        <div class="row">
+            <div class="col s6">
+                <table class="striped display">
+                    <thead>
+                        <tr>
+                            <th>Fuente</th>
+                            <th>Fecha</th>
+                            <th>Egresos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in Ingreso %}
+                        <tr>
+                            <td>{{ g.Fuente.Fuente }}</td>
+                            <td>{{ g.Fecha_Registro }}</td>
+                            <td>{{ g.Monto }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s6">
+                <div class='row'>
+                    <canvas id="pie-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    {% else %} 
+        <h4>REPORTE DE INGRESOS</h4>
+        <div class="row">
+            <div class="col s6">
+                <table class="striped display">
+                    <thead>
+                        <tr>
+                            <th>Fuente</th>
+                            <th>Fecha</th>
+                            <th>Ingresos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in Ingreso %}
+                        <tr>
+                            <td>{{ g.Fuente.Fuente }}</td>
+                            <td>{{ g.Fecha_Registro }}</td>
+                            <td>{{ g.Monto }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s6">
+                <div class='row'>
+                    <canvas id="pie-chart2"></canvas>
+                </div>
+            </div>
+        </div>
+        <h4>REPORTE DE EGRESOS</h4>
+        <div class="row">
+            <div class="col s6">
+                <table class="striped display">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Fuente</th>
+                            <th>Fecha</th>
+                            <th>Egresos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in Gasto %}
+                        <tr>
+                            <td>{{ g.Tipo }}</td>
+                            <td>{{ g.Fuente.Fuente }}</td>
+                            <td>{{ g.Fecha_Registro }}</td>
+                            <td>{{ g.Monto }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s6">
+                <div class='row'>
+                    <canvas id="pie-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     {% block js %}
         <script>
-            var config = {
-            type: 'pie',
-            data: {
+
+            const data = {
                 datasets: [{
                 data: {{ data|safe }},
                 backgroundColor: [
-                    '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'
+                    '#3421EC', '#FA3EFC', '#FCF03E', '#FF0000', '#00FF06'
                 ],
-                label: 'Population'
+                label: 'Ingresos'
                 }],
                 labels: {{ labels|safe }}
-            },
-            options: {
-                responsive: true
             }
+
+            const data2 = {
+                datasets: [{
+                data: {{ data2|safe }},
+                backgroundColor: [
+                    '#3421EC', '#FA3EFC', '#FCF03E', '#FF0000', '#00FF06'
+                ],
+                label: 'Gastos'
+                }],
+                labels: {{ labels2|safe }}
+            }
+            
+            var config = {
+                type: 'pie',
+                data,
+                options: {
+                    responsive: true
+                }
             };
 
-            window.onload = function() {
-            var ctx = document.getElementById('pie-chart').getContext('2d');
-            window.myPie = new Chart(ctx, config);
+            var config2 = {
+                type: 'pie',
+                data:data2,
+                options: {
+                    responsive: true
+                }
             };
 
+
+            const char1 = new Chart(
+                document.getElementById('pie-chart'),
+                config
+            ); 
+
+            const char2 = new Chart(
+                document.getElementById('pie-chart2'),
+                config2
+            ); 
         </script>
+       
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
+
+            $(document).ready(function() {
+                $('table.display').DataTable();
+            } );
+
+            $(function () {
+            
+                setTimeout(() => {
+                    $('.alert').slideUp(function () {
+                        $(this).remove();
+                    });
+                }, 3000)
+        
+            });
+        </script>
+        
     {% endblock js %}
 {% endblock  %}
