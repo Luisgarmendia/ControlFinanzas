@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from app_Clientes.models import Cliente
 from app_Fuente_Dinero.models import FuenteDinero
@@ -131,7 +131,7 @@ def actualizar_gasto(request, id):
         }
     
     
-        return render(request, 'Gastos/index.html', ctx)
+        return render(request, 'gastos/index.html', ctx)
 
 @login_required
 def eliminar_gasto(request, id,idFuente, monto):
@@ -140,4 +140,33 @@ def eliminar_gasto(request, id,idFuente, monto):
     fuente = FuenteDinero.objects.get(id=idFuente)
     fuente.Saldo = fuente.Saldo + montoRecuperado
     fuente.save()
+    return redirect(reverse('Gastos:index'))
+
+@login_required
+def addTipoGasto(request):
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo')
+
+        TipoGastoD = TipoGasto(Tipo=tipo)
+        TipoGastoD.save()
+    return redirect(reverse('Gastos:index'))
+
+@login_required
+def editTipoGasto(request,id):
+    TipoGastoD = TipoGasto.objects.get(pk=id)
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo')
+
+        TipoGastoD.Tipo = tipo
+        TipoGastoD.save()
+        return redirect(reverse('Gastos:index'))
+    else:
+        ctx={
+            "CurrentTipoGasto":TipoGastoD,
+        }
+        return render(request, 'gastos/index.html' , ctx)
+
+@login_required
+def deleteTipoGasto(request,id):
+    TipoGasto.objects.get(pk=id).delete()
     return redirect(reverse('Gastos:index'))

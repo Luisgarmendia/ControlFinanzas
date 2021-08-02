@@ -23,24 +23,29 @@
                 </div>
             {% endif %}
                 {% csrf_token %}
-                <div class="mb-3">
                     <div class="input-field" required autofocus>
-                        <select class="form-control"  name="tipo" id="tipo">
-                            {% for p in TipoGasto %}
-                                
-                                {% if GastoActual.Tipo.id == p.id %}
-                                    <option value="{{ p.id }}" selected>{{ p.Tipo }}</option>
-                                {% else %}
-                                    <option value="{{ p.id }}">{{ p.Tipo }}</option>
-                                {% endif %}
-
-                            {% empty %}
-
-                            {% endfor %}
-                        </select>
-                        <label>Tipo de gasto</label>
+                        <div class="row">
+                            <div class="col l10">
+                                <select class="form-control"  name="tipo" id="tipo">
+                                    {% for p in TipoGasto %}
+                                        
+                                        {% if GastoActual.Tipo.id == p.id %}
+                                            <option value="{{ p.id }}" selected>{{ p.Tipo }}</option>
+                                        {% else %}
+                                            <option value="{{ p.id }}">{{ p.Tipo }}</option>
+                                        {% endif %}
+        
+                                    {% empty %}
+        
+                                    {% endfor %}
+                                </select>
+                                <label>Tipo de gasto</label>
+                            </div>
+                            <div class="col l2">
+                                <a class="btn-floating btn modal-trigger" href="#modalTipoGasto"><i class="material-icons">add</i></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 
                 <div>
                     <div class="input-field"  required autofocus>
@@ -112,7 +117,63 @@
             </table>
         </div>
     </div>
-
+    <!-- Modal Structure -->
+    <div id="modalTipoGasto" style="height:60%; width:60%;" class="modal modal-fixed-footer">
+        <div class="modal-content" style="overflow:hidden; ">
+            {% if CurrentTipoGasto %}
+            <form class="container" action="{% url 'Gastos:editTipoGasto' CurrentTipoGasto.id %}" method="POST">
+            {% else %}
+            <form class="container" action="{% url 'Gastos:addTipoGasto' %}" method="POST">
+            {% endif %}
+                <div class="row">
+                    <div class="col s12 l3">
+                        {% csrf_token %}
+                        <div class="input-field">
+                            <input placeholder="Ingrese Tipo" value="{{TipoGasto.Tipo}}" name="tipo" id="tipo" type="text" class="validate" required>
+                            <label for="tipo">Tipo</label>
+                        </div>
+                        {% if CurrentTipoGasto %}
+                        <input type="submit" class="btn btn-success" value="Actualizar">
+                        {% else %}
+                        <input type="submit" class="btn btn-success" value="Registrar">
+                        {% endif %}
+                    </div>
+                    <div class="col s12 l9">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in TipoGasto %}
+                                <tr>
+                                    <td>{{ t.Tipo }}</td>
+                                    <td class="text-center">
+                                        <a onclick="if (!confirm('Confirme la eliminación')) return false;" href="{% url 'Gastos:deleteTipoGasto' t.id %}" class="text-danger"><i class="Small material-icons">delete</i></a>
+                                        <a href="{% url 'Gastos:editTipoGasto' t.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+            <!-- Flooter modal-->
+            <div class="modal-footer" >
+                <div class="container">
+                    <a href="{% url 'app_login:logout_view' %}" class="modal-close container waves-effect waves-green btn-flat">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Structure close-->
     {% block js %}
     <script>
         $(document).ready(function(){

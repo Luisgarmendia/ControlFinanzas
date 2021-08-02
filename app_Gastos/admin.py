@@ -6,7 +6,11 @@ class GastosAdmin(admin.ModelAdmin):
     list_display = ('id','Fecha_Registro','Tipo','Monto')
     list_filter = ('Fecha_Registro',)
     search_fields = ('Monto',)
-    date_hierarchy = 'Fecha_Registro' 
+    date_hierarchy = 'Fecha_Registro'
 
-admin.site.register(TipoGasto)
+class TipoGastoAdmin(admin.ModelAdmin):
+    list_display = ('id','Tipo')
+    list_filter = ('Tipo',)
+
+admin.site.register(TipoGasto,TipoGastoAdmin)
 admin.site.register(Gasto,GastosAdmin)
