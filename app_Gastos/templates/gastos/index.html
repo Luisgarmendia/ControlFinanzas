@@ -65,7 +65,7 @@
                 
                 <div class="mb-3">
                     <div class="input-field col s12">
-                        <input placeholder="Ingrese un monto" value="{{ GastoActual.Monto }}" name="monto" id="monto" type="number" class="validate" required>
+                        <input placeholder="Ingrese un monto" value="{{ GastoActual.Monto }}" name="monto" pattern="[0-9]+" id="monto" min="1" step="1" type="number" class="validate" required>
                         <label for="monto">Monto</label>
                     </div>
                 </div>
@@ -126,8 +126,31 @@
                     $(this).remove();
                 });
             }, 3000)
-    
         });
+const campoNumerico = document.getElementById('monto');
+campoNumerico.addEventListener('keydown', function(evento) {
+  const teclaPresionada = evento.key;
+  const teclaPresionadaEsUnNumero =
+    Number.isInteger(parseInt(teclaPresionada));
+
+  const sePresionoUnaTeclaNoAdmitida = 
+    teclaPresionada != 'ArrowDown' &&
+    teclaPresionada != 'ArrowUp' &&
+    teclaPresionada != 'ArrowLeft' &&
+    teclaPresionada != 'ArrowRight' &&
+    teclaPresionada != 'Backspace' &&
+    teclaPresionada != 'Delete' &&
+    teclaPresionada != 'Enter' &&
+    !teclaPresionadaEsUnNumero;
+  const comienzaPorCero = 
+    campoNumerico.value.length === 0 &&
+    teclaPresionada == 0;
+
+  if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
+    evento.preventDefault(); 
+  }
+
+});
     </script>
     {% endblock js %}
 {% endblock  %}

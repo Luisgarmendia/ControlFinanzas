@@ -21,14 +21,14 @@
            
             <div class="mb-3">
                 <div class="input-field col s12"  required autofocus>
-                    <input placeholder="Nombre de la Fuente" value="{{FuenteActual.Fuente}}" name="nombre" id="nombre" type="text" class="validate" required>
+                    <input placeholder="Nombre de la Fuente" value="{{FuenteActual.Fuente}}" name="nombre" id="nombre" type="text" class="validate" required/>
                     <label>Nombre de la fuente</label>
                 </div>
             </div>
             
             <div class="mb-3">
                 <div class="input-field col s12">
-                    <input placeholder="Ingrese un monto" value="{{FuenteActual.Saldo}}" name="monto" id="monto" type="number" class="validate" required>
+                    <input placeholder="Ingrese un monto" value="{{FuenteActual.Saldo}}" name="monto" pattern="[0-9]+" min="1" step="1" id="monto" type="number" class="validate" required/>
                     <label for="monto">Monto</label>
                 </div>
             </div>
@@ -88,6 +88,34 @@
             }, 3000)
 
         });
+
+const campoNumerico = document.getElementById('monto');
+campoNumerico.addEventListener('keydown', function(evento) {
+  const teclaPresionada = evento.key;
+  const teclaPresionadaEsUnNumero =
+    Number.isInteger(parseInt(teclaPresionada));
+
+  const sePresionoUnaTeclaNoAdmitida = 
+    teclaPresionada != 'ArrowDown' &&
+    teclaPresionada != 'ArrowUp' &&
+    teclaPresionada != 'ArrowLeft' &&
+    teclaPresionada != 'ArrowRight' &&
+    teclaPresionada != 'Backspace' &&
+    teclaPresionada != 'Delete' &&
+    teclaPresionada != 'Enter' &&
+    !teclaPresionadaEsUnNumero;
+  const comienzaPorCero = 
+    campoNumerico.value.length === 0 &&
+    teclaPresionada == 0;
+
+  if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
+    evento.preventDefault(); 
+  }
+
+});
+
+
+
     </script>
 {% endblock js %}
 {% endblock container %}
