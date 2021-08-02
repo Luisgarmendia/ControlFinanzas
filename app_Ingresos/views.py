@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Sum
 from django.shortcuts import render,redirect
 from .models import Ingreso
 from app_Fuente_Dinero.models import FuenteDinero
@@ -11,9 +12,16 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    TotalIngresos = 0
+    TotalIngresos = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+
     ctx = {
         'Ingreso': data,
         'Fuente': data2,
+        'Saldo': Saldo.get('Saldo__sum'),
+        'TotalIngresos': TotalIngresos
     }
     return render(request, 'Ingresos/index.html', ctx)
 
@@ -21,7 +29,8 @@ def index(request):
 def registrar_ingreso(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     if request.method == 'POST':
         idFuente = request.POST.get('fuente')
         hoy = datetime.now().date()
@@ -44,10 +53,16 @@ def registrar_ingreso(request):
         
         
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
+    TotalIngresos = 0
+    TotalIngresos = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+
     ctx = {
         'Ingreso': data,
         'Fuente': data2,
+        'Saldo': Saldo.get('Saldo__sum'),
+        'TotalIngresos': TotalIngresos
     }
+
     return render(request, 'Ingresos/index.html',ctx)
 
 @login_required
@@ -55,7 +70,8 @@ def actualizar_ingreso(request, id):
     ingreso = Ingreso.objects.get(pk=id)
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     fuente_antigua = ingreso.Fuente
     monto_antiguo = ingreso.Monto
 
@@ -111,6 +127,7 @@ def actualizar_ingreso(request, id):
             'Ingreso': data,
             'Fuente': data2,
             'IngresoActual': ingreso,
+            'Saldo': Saldo
         }
     
     

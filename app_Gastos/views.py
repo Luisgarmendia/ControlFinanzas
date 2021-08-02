@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models.aggregates import Sum
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import User
 from app_Clientes.models import Cliente
 from app_Fuente_Dinero.models import FuenteDinero
@@ -14,10 +15,13 @@ def index(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = TipoGasto.objects.all()
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     ctx = {
         'Gasto': data,
         'TipoGasto': data2,
         'Fuente': data3,
+        'Saldo': Saldo.get('Saldo__sum')
     }
     return render(request, 'gastos/index.html',ctx)
 
@@ -26,7 +30,8 @@ def registrar_gasto(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = TipoGasto.objects.all()
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     if request.method == 'POST':
         hoy = datetime.now().date()
         tipo = request.POST.get('tipo')
@@ -56,6 +61,7 @@ def registrar_gasto(request):
         'Gasto': data,
         'TipoGasto': data2,
         'Fuente': data3,
+        'Saldo': Saldo.get('Saldo__sum')
     }
     return render(request, 'gastos/index.html',ctx)
 
@@ -65,7 +71,8 @@ def actualizar_gasto(request, id):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = TipoGasto.objects.all()
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     fuente_antigua = gasto.Fuente
     monto_antiguo = gasto.Monto
 
@@ -128,13 +135,14 @@ def actualizar_gasto(request, id):
             'TipoGasto': data2,
             'Fuente': data3,
             'GastoActual': gasto,
+            'Saldo': Saldo.get('Saldo__sum')
         }
     
     
         return render(request, 'gastos/index.html', ctx)
 
 @login_required
-def eliminar_gasto(request, id,idFuente, monto):
+def eliminar_gasto(request, id, idFuente, monto):
     Gasto.objects.get(pk=id).delete()
     montoRecuperado = monto
     fuente = FuenteDinero.objects.get(id=idFuente)

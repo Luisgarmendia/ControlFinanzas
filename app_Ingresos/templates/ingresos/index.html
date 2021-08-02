@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
     Ingresos
 {% endblock  %}
@@ -28,12 +28,12 @@
                         <select class="form-control" name="fuente" id="fuente">
                             {% for d in Fuente %}
                                 {% if IngresoActual.Fuente.id == d.id %}
-                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% else %}
-                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% endif %}
                             {% empty %}
-
+                                <option value="-1">Ingrese una fuentes de dinero</option>
                             {% endfor %}
                         </select>
                         <label>Fuentes</label>
@@ -72,7 +72,7 @@
                     <tr>
                         <td>{{ i.Fuente.Fuente }}</td>
                         <td>{{ i.Fecha_Registro }}</td>
-                        <td>{{ i.Monto }}</td>
+                        <td>{{ i.Monto|floatformat:2|intcomma}} Lps.</td>
                         <td class="text-center">
                             <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'Ingresos:eliminar_ingreso' i.id i.Fuente.id i.Monto %}" class="text-danger"><i class="Small material-icons">delete</i></a>
                             <a href="{% url 'Ingresos:actualizar_ingreso' i.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
@@ -82,7 +82,20 @@
                     <tr>
                         <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
                     </tr>
+
                     {% endfor %}
+
+                   {% if TotalIngresos > 0 %}
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-danger text-center">
+                            <div class="right-align"><b>Total:
+                                <span id="total">{{ TotalIngresos |floatformat:2|intcomma}} Lps.</span>
+                                </b></div>
+                            </td>
+                        </tr> 
+                    </tfoot>    
+                   {% endif %}
                 </tbody>
             </table>
         </div>
@@ -105,3 +118,5 @@
     </script>
     {% endblock js %}
 {% endblock  %}
+
+{% block saldo %}{{Saldo|floatformat:2|intcomma}} Lps{% endblock saldo %}

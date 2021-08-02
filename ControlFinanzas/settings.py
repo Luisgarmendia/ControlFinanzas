@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'app_login', # SE BORRO LOGIN -> SE AGREGO 'app_login'
     'app_Fuente_Dinero',
     'app_Clientes',

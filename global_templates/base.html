@@ -26,7 +26,7 @@
 
    <nav>
     <div class="nav-wrapper container">
-      <a href="/" class="brand-logo">Saldo: ({% block saldo %}{% endblock saldo %})</a>
+      <a href="/" class="brand-logo">Saldo: {% block saldo %}{% endblock saldo %}</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <li><a href="/">Dashboard</a></li>
@@ -73,17 +73,21 @@
           <label for="apellido">Apellido</label>
         </div>
         <div class="input-field">
-            <input placeholder="Ingrese Contraseña" value="" name="pass" id="pass" type="password" class="validate" required>
+            <input placeholder="Ingrese Contraseña" value="" name="contra" id="pass" type="password" class="validate" >
             <label for="contraseña">Contraseña</label>
+        </div>
+        <div class="input-field">
+            <input placeholder="Ingrese Contraseña" value="" name="confirmar" id="pass" type="password" class="validate" >
+            <label for="contraseña">Confirmar</label>
         </div>
         <div class="center">
             <input type="submit" class="btn btn-success" value="Actualizar">
         </div>        
       </form>
-    <!-- Flooter modal-->
+      <!-- Flooter modal-->
       <div class="modal-footer" >
       <div class="container">
-        <a href="{% url 'app_login:logout_view' %}" class="modal-close container waves-effect waves-green btn-flat">Cerrar Sesión</a>
+        <a href="{% url 'app_login:logout_view' %}"  class="modal-close container waves-effect waves-green btn-flat ">Cerrar Sesión</a>
       </div>
       </div>
     </div>

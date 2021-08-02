@@ -6,7 +6,8 @@ from datetime import datetime
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-#IMPORTAR MODELO de fuente dinero
+#IMPORTAR MODELO de fuente dinero\
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -14,9 +15,11 @@ from django.contrib.auth.decorators import login_required
 #crear la vista de index
 @login_required
 def index(request):
-    cliente = Cliente.objects.get(Usuario = request.user)
-    fuente =  FuenteDinero.objects.filter(Cliente=cliente)
+    fuente =  FuenteDinero.objects.filter(Cliente=request.user.cliente)
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
     ctx = {
+        "Saldo":Saldo.get('Saldo__sum'),
         'fuentes':fuente
     }
     return render(request, 'RegistroFuente/index.html',ctx)
@@ -39,9 +42,12 @@ def editar(request,id):
             messages.add_message(request, messages.ERROR, 'No se ha ingresado un monto correcto.')
         return redirect(reverse('FuenteDinero:index'))
     else:
+        Saldo = 0
+        Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
         ctx={
             "FuenteActual":FuenteD,
             'fuentes':fuente,
+            "Saldo":Saldo.get('Saldo__sum'),
         }
         return render(request, 'RegistroFuente/index.html' , ctx)
 #crear la vista de edit

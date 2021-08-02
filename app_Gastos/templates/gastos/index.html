@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
     Gastos
 {% endblock  %}
@@ -23,29 +23,29 @@
                 </div>
             {% endif %}
                 {% csrf_token %}
-                    <div class="input-field" required autofocus>
-                        <div class="row">
-                            <div class="col l10">
-                                <select class="form-control"  name="tipo" id="tipo">
-                                    {% for p in TipoGasto %}
-                                        
-                                        {% if GastoActual.Tipo.id == p.id %}
-                                            <option value="{{ p.id }}" selected>{{ p.Tipo }}</option>
-                                        {% else %}
-                                            <option value="{{ p.id }}">{{ p.Tipo }}</option>
-                                        {% endif %}
-        
-                                    {% empty %}
-        
-                                    {% endfor %}
-                                </select>
-                                <label>Tipo de gasto</label>
-                            </div>
-                            <div class="col l2">
-                                <a class="btn-floating btn modal-trigger" href="#modalTipoGasto"><i class="material-icons">add</i></a>
-                            </div>
+                <div class="input-field" required autofocus>
+                    <div class="row">
+                        <div class="col l10">
+                            <select class="form-control"  name="tipo" id="tipo">
+                                {% for p in TipoGasto %}
+                                    
+                                    {% if GastoActual.Tipo.id == p.id %}
+                                        <option value="{{ p.id }}" selected>{{ p.Tipo }}</option>
+                                    {% else %}
+                                        <option value="{{ p.id }}">{{ p.Tipo }}</option>
+                                    {% endif %}
+    
+                                {% empty %}
+    
+                                {% endfor %}
+                            </select>
+                            <label>Tipo de gasto</label>
+                        </div>
+                        <div class="col l2">
+                            <a class="btn-floating btn modal-trigger" href="#modalTipoGasto"><i class="material-icons">add</i></a>
                         </div>
                     </div>
+                </div>
                 
                 <div>
                     <div class="input-field"  required autofocus>
@@ -53,15 +53,15 @@
                             {% for d in Fuente %}
                                 
                                 {% if GastoActual.Fuente.id == d.id %}
-                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% else %}
-                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% endif %}
                                     
                                 
 
                             {% empty %}
-
+                                <option value="-1">Ingrese una fuentes de dinero</option>
                             {% endfor %}
                         </select>
                         <label>Fuentes</label>
@@ -102,7 +102,7 @@
                         <td>{{ g.Fuente.Fuente }}</td>
                         <td>{{ g.Fecha_Registro }}</td>
                         <td>{{ g.Tipo }}</td>
-                        <td>{{ g.Monto }}</td>
+                        <td>{{ g.Monto|floatformat:2|intcomma}} Lps.</td>
                         <td class="text-center">
                             <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'Gastos:eliminar_gasto' g.id g.Fuente.id g.Monto %}" class="text-danger"><i class="Small material-icons">delete</i></a>
                             <a href="{% url 'Gastos:actualizar_gasto' g.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
@@ -191,3 +191,5 @@
     </script>
     {% endblock js %}
 {% endblock  %}
+
+{% block saldo %}{{Saldo|floatformat:2|intcomma}} Lps{% endblock saldo %}

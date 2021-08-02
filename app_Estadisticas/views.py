@@ -16,6 +16,8 @@ def index(request):
     filtro = 0
     busqueda = 0
     mesActual = datetime.now().month
+    Saldo = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
 
     data3 = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user, Fecha_Registro__month=mesActual)
     data4 = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user, Fecha_Registro__month=mesActual)
@@ -140,13 +142,14 @@ def index(request):
             print("Seleccion")
 
     ctx = {
-            'labels': labels,
-            'data': data,
-            'labels2': labels2,
-            'data2': data2,
-            'Gasto':data4,
-            'Ingreso':data3,
-            'filtro':filtro,
-            'busqueda':busqueda,
-        }
+        'labels': labels,
+        'data': data,
+        'labels2': labels2,
+        'data2': data2,
+        'Gasto':data4,
+        'Ingreso':data3,
+        'filtro':filtro,
+        'busqueda':busqueda,
+        'Saldo':Saldo.get('Saldo__sum')
+    }
     return render(request, 'estadisticas/index.html',ctx)

@@ -67,17 +67,14 @@ def editar(request):
         apellido = request.POST.get('apellido')
         contra = request.POST.get('contra')
         confcontra = request.POST.get('confirmar')
-        usr_exist =  User.objects.filter(username=usuario.username).count()
         if contra != confcontra:
             return messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden')
-        if usr_exist > 0:
-            return messages.add_message(request, messages.INFO, 'Este usuario ya existe')
-        
         cliente.Nombre = nombre
-        cliente.Apellido = Apellido
+        cliente.Apellido = apellido
         cliente.save()
-        usuario.password = contra
-        usuario.save()
+        if contra != '' and confcontra != '':
+            usuario.set_password(contra)
+            usuario.save()
     return redirect('/')
     
     
