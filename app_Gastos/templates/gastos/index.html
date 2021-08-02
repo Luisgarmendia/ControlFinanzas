@@ -8,7 +8,7 @@
 
     <div class="row" style="margin-top: 3%">
         <!-- formulario -->
-        <div class="col s3">
+        <div class="col s12 l3">
             {% if GastoActual %}
             <form action="{% url 'Gastos:actualizar_gasto' GastoActual.id %}" method="post">
             {% else %}
@@ -24,7 +24,7 @@
             {% endif %}
                 {% csrf_token %}
                 <div class="mb-3">
-                    <div class="input-field col s12" required autofocus>
+                    <div class="input-field" required autofocus>
                         <select class="form-control"  name="tipo" id="tipo">
                             {% for p in TipoGasto %}
                                 
@@ -42,8 +42,8 @@
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    <div class="input-field col s12"  required autofocus>
+                <div>
+                    <div class="input-field"  required autofocus>
                         <select class="form-control" name="fuente" id="fuente">
                             {% for d in Fuente %}
                                 
@@ -63,15 +63,15 @@
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    <div class="input-field col s12">
+                <div>
+                    <div class="input-field">
                         <input placeholder="Ingrese un monto" value="{{ GastoActual.Monto }}" name="monto" pattern="[0-9]+" id="monto" min="1" step="1" type="number" class="validate" required>
                         <label for="monto">Monto</label>
                     </div>
                 </div>
                 
 
-                <div class="mb-3">
+                <div>
                     {% if GastoActual %}
                     <input type="submit" class="btn btn-success" value="Actualizar Gasto">
                     {% else %}
@@ -80,7 +80,7 @@
                 </div>
             </form>
         </div>
-        <div class="col s9">
+        <div class="col s12 l9">
             <table class="striped">
                 <thead>
                     <tr>
