@@ -51,10 +51,10 @@ def log_in(request):
 
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return index(request)
         else:
             messages.add_message(request, messages.ERROR, 'El usuario/contraseña inválidos o la cuenta está desactivada')
-            return redirect('login/')
+            return redirect('/login/')
     else:
         return render(request,'login/index.html')
 

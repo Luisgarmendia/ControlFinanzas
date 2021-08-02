@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
     Estadisticas
 {% endblock  %}
@@ -79,7 +79,7 @@
                             <td>{{ g.Fuente.Fuente }}</td>
                             <td>{{ g.Fecha_Registro }}</td>
                             <td>{{ g.Tipo }}</td>
-                            <td>{{ g.Monto }}</td>
+                            <td>{{ g.Monto |floatformat:2|intcomma}} Lps.</td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -111,7 +111,7 @@
                         <tr>
                             <td>{{ g.Fuente.Fuente }}</td>
                             <td>{{ g.Fecha_Registro }}</td>
-                            <td>{{ g.Monto }}</td>
+                            <td>{{ g.Monto |floatformat:2|intcomma}} Lps.</td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -144,7 +144,7 @@
                         <tr>
                             <td>{{ g.Fuente.Fuente }}</td>
                             <td>{{ g.Fecha_Registro }}</td>
-                            <td>{{ g.Monto }}</td>
+                            <td>{{ g.Monto |floatformat:2|intcomma}} Lps.</td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -178,7 +178,7 @@
                             <td>{{ g.Tipo }}</td>
                             <td>{{ g.Fuente.Fuente }}</td>
                             <td>{{ g.Fecha_Registro }}</td>
-                            <td>{{ g.Monto }}</td>
+                            <td>{{ g.Monto |floatformat:2|intcomma}} Lps.</td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -278,3 +278,5 @@
     </script>
     {% endblock js %}
 {% endblock  %}
+
+{% block saldo %}{{Saldo|floatformat:2|intcomma}} Lps{% endblock saldo %}

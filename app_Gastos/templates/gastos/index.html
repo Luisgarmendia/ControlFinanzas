@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
     Gastos
 {% endblock  %}
@@ -35,8 +35,9 @@
                                 {% endif %}
 
                             {% empty %}
-
+                                    <option value="" disabled selcted>Ingrese una Tipos de gasto</option>
                             {% endfor %}
+                                    <option value="" disabled selcted><a >Agrear Nuevo </a></option>
                         </select>
                         <label>Tipo de gasto</label>
                     </div>
@@ -48,15 +49,15 @@
                             {% for d in Fuente %}
                                 
                                 {% if GastoActual.Fuente.id == d.id %}
-                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}" selected>{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% else %}
-                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo}}</option>
+                                    <option value="{{ d.id }}">{{ d.Fuente }} : {{d.Saldo|floatformat:2|intcomma}} Lps.</option>
                                 {% endif %}
                                     
                                 
 
                             {% empty %}
-
+                                <option value="-1">Ingrese una fuentes de dinero</option>
                             {% endfor %}
                         </select>
                         <label>Fuentes</label>
@@ -97,7 +98,7 @@
                         <td>{{ g.Fuente.Fuente }}</td>
                         <td>{{ g.Fecha_Registro }}</td>
                         <td>{{ g.Tipo }}</td>
-                        <td>{{ g.Monto }}</td>
+                        <td>{{ g.Monto|floatformat:2|intcomma}} Lps.</td>
                         <td class="text-center">
                             <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'Gastos:eliminar_gasto' g.id g.Fuente.id g.Monto %}" class="text-danger"><i class="Small material-icons">delete</i></a>
                             <a href="{% url 'Gastos:actualizar_gasto' g.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
@@ -112,7 +113,7 @@
             </table>
         </div>
     </div>
-
+    
     {% block js %}
     <script>
         $(document).ready(function(){
@@ -130,3 +131,5 @@
     </script>
     {% endblock js %}
 {% endblock  %}
+
+{% block saldo %}{{Saldo|floatformat:2|intcomma}} Lps{% endblock saldo %}

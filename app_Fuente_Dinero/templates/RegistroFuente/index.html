@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Fuentes de Dinero{% endblock title %}
-
+{% load humanize %}
 {% block container %}
 <div class="row" style="margin-top: 3%">
     <div class="col s12 l3">
@@ -57,7 +57,7 @@
                 <tr>
                     <td>{{ f.Fecha_Registro }}</td>
                     <td>{{ f.Fuente }}</td>
-                    <td class="right-align money">{{ f.Saldo }}</td>
+                    <td class="right-align money">{{ f.Saldo |floatformat:2|intcomma}} Lps.</td>
                     <td class="center-align">
                         <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'FuenteDinero:eliminar' f.id %}" class="text-danger"><i class="Small material-icons">delete</i></a>
                         <a href="{% url 'FuenteDinero:editar' f.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
@@ -89,3 +89,5 @@
     </script>
 {% endblock js %}
 {% endblock container %}
+{% load humanize %}
+{% block saldo %}{{Saldo|floatformat:2|intcomma}} Lps{% endblock saldo %}
