@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <div class="col s6">
                     <div class="input-field col s12"  required autofocus>
-                        <select class="form-control" name="tipos" id="tipos" onchange="function(){this.form.submit()}">
+                        <select class="form-control" name="tipos" id="tipos" onchange="javascript:Recargar()">
                             {% if filtro == "1" %}
                                 <option value="1" selected>Informe Gastos</option>
                                 <option value="2">Informe Fuentes</option>
@@ -37,7 +37,7 @@
                         <label>Tipos de Datos</label>
                     </div>
                     <div class="input-field col s12"  required autofocus>
-                        <select class="form-control" name="busqueda" id="busqueda" onchange="function(){this.form.submit()}">
+                        <select class="form-control" name="busqueda" id="busqueda" onchange="javascript:Recargar()">
                             {% if busqueda == '1' %}
                                 <option value="1" selected>Busqueda por mes y año</option>
                                 <option value="2">Busqueda por año</option>
@@ -83,7 +83,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados de Egresos</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -115,7 +115,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados de Egresos</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -148,7 +148,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados de Ingresos</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -182,7 +182,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-danger text-center">No se encontraron resultados</td>
+                            <td colspan="5" class="text-danger text-center">No se encontraron resultados de Egresos</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -270,5 +270,11 @@
             });
         </script>
         
+    <script>
+       function Recargar(){
+            console.log('Recargar');
+            $("form").submit();
+        };
+    </script>
     {% endblock js %}
 {% endblock  %}
