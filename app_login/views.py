@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect(reverse('Clientes:index'))
+        return redirect(reverse('Estadisticas:index'))
 
-    return render(request, 'login/index.html')
+    return redirect(reverse('app_login:login_view'))
 
 def registro_cliente(request):
     err = False
@@ -51,13 +51,12 @@ def log_in(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse('Clientes:index'))
+            return redirect('/')
         else:
             messages.add_message(request, messages.ERROR, 'El usuario/contraseña inválidos o la cuenta está desactivada')
-            return redirect('/')
-
+            return redirect('login/')
     else:
-        return redirect('/')
+        return render(request,'login/index.html')
 
 
 def log_out(request):

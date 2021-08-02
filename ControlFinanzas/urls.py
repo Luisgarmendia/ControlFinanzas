@@ -20,11 +20,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Clientes/',include('app_Clientes.urls')),# URL CLIENTES
-    path('Gastos/',include('app_Gastos.urls')),# URL GASTOS
-    path('Ingresos/',include('app_Ingresos.urls')),
-    path('Estadisticas/',include('app_Estadisticas.urls')),# URL ESTADISTICAS
+    path('clientes/',include('app_Clientes.urls')),# URL CLIENTES
+    path('gastos/',include('app_Gastos.urls')),# URL GASTOS
+    path('ingresos/',include('app_Ingresos.urls')),
+    path('estadisticas/',include('app_Estadisticas.urls')),# URL ESTADISTICAS
+    path('fuentedinero/',include('app_Fuente_Dinero.urls')),# URL FuenteDinero
     path('',include('app_login.urls')),# URL Login
-    path('FuenteDinero/',include('app_Fuente_Dinero.urls')),# URL FuenteDinero
     
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

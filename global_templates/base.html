@@ -16,24 +16,36 @@
     <script src="{% static 'global/js/jquery.min.js' %}"></script>
     <script src="{% static 'global/js/materialize.min.js' %}"></script>
     <script src="{% static 'plugins/dataTable/datatables.min.js' %}"></script>
-    <script src="{% static 'global/js/custom.js' %}"></script>
+    <script src="{% static 'global/js/custon.js' %}"></script>
     <script src="{% static 'global/js/highcharts.js' %}"></script>
     <script src="{% static 'global/js/highcharts.src.js' %}"></script>
     <script src="{% static 'global/js/highcharts-gantt.js' %}"></script>
     <script src="{% static 'global/js/highcharts-gantt.js' %}"></script>
-    <nav>
-      <div class="nav-wrapper container">
-        <a href="/" class="brand-logo">Control Finanzas</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="/">Dashboard</a></li>
-          <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
-          <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
-          <li><b><a href="#">Saldo: ({% block saldo %}{% endblock saldo %})</a></b></li> 
-          <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
-        </ul>
 
-      </div>
-    </nav>
+
+
+   <nav>
+    <div class="nav-wrapper container">
+      <a href="/" class="brand-logo">Saldo: ({% block saldo %}{% endblock saldo %})</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
+        <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
+        <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
+        <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="/">Dashboard</a></li>
+    <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
+    <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
+    <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
+    <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
+  </ul>
+
     <div class="container">
     <br>
     <br>
@@ -41,6 +53,7 @@
       {% endblock container %}
     </div >
 
-  {% block js %}{% endblock js %}
+  {% block js %}
+  {% endblock js %}
 </body>
 </html>
