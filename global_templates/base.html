@@ -16,49 +16,31 @@
     <script src="{% static 'global/js/jquery.min.js' %}"></script>
     <script src="{% static 'global/js/materialize.min.js' %}"></script>
     <script src="{% static 'plugins/dataTable/datatables.min.js' %}"></script>
-    <script src="{% static 'global/js/custon.js' %}"></script>
+    <script src="{% static 'global/js/custom.js' %}"></script>
+    <script src="{% static 'global/js/highcharts.js' %}"></script>
+    <script src="{% static 'global/js/highcharts.src.js' %}"></script>
+    <script src="{% static 'global/js/highcharts-gantt.js' %}"></script>
+    <script src="{% static 'global/js/highcharts-gantt.js' %}"></script>
     <nav>
       <div class="nav-wrapper container">
-        
-        <a href="#" class="brand-logo">Hola</a>
+        <a href="/" class="brand-logo">Control Finanzas</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="">Home</a></li>
-
-          <li><a href="">About</a></li>
-          <li><a href="">Contact</a></li>
-          <li><a href="{% url 'app_login:logout_view' %}">LogOut</a></li>
+          <li><a href="/">Dashboard</a></li>
+          <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
+          <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
+          <li><b><a href="#">Saldo: ({% block saldo %}{% endblock saldo %})</a></b></li> 
+          <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
         </ul>
 
       </div>
     </nav>
     <div class="container">
+    <br>
+    <br>
       {% block container %}
-
       {% endblock container %}
-
     </div >
 
-    <div class="container">
-    
-    {% comment %} <table class="display">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>nombre</th>
-            <th>Perro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-        </tbody>
-      </table>
-    </div> {% endcomment %}
-      
-    </div>
   {% block js %}{% endblock js %}
 </body>
 </html>
