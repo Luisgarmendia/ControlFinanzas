@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Cliente
 # Create your views here.
 #importar login required para evitar acceso no autorizado
@@ -57,3 +57,27 @@ def adminCuenta(request):
         'cliente':cliente
     }
     return render(request,'Clientes/cuenta.html',ctx)
+
+@login_required
+def editar(request):
+    cliente = Cliente.objects.get(Usuario=request.user)
+    usuario = User.objects.get(id = request.user.id)
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        contra = request.POST.get('contra')
+        confcontra = request.POST.get('confirmar')
+        usr_exist =  User.objects.filter(username=usuario.username).count()
+        if contra != confcontra:
+            return messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden')
+        if usr_exist > 0:
+            return messages.add_message(request, messages.INFO, 'Este usuario ya existe')
+        
+        cliente.Nombre = nombre
+        cliente.Apellido = Apellido
+        cliente.save()
+        usuario.password = contra
+        usuario.save()
+    return redirect('/')
+    
+    

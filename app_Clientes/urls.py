@@ -8,5 +8,6 @@ app_name = 'Clientes'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('Cuenta/', views.adminCuenta,name='adminCuenta') #Administracion del Usuario Logeado
+    path('Cuenta/', views.adminCuenta,name='adminCuenta'), #Administracion del Usuario Logeado
+    path('editar/',views.editar , name='edit'),
 ]

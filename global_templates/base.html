@@ -33,7 +33,7 @@
         <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
         <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
         <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
-        <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
+        <li><a class="waves-effect waves-light modal-trigger" href="#modal1">{{request.user.cliente}}</a></li>
       </ul>
     </div>
   </nav>
@@ -43,7 +43,7 @@
     <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
     <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
     <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
-    <li><a href="{% url 'app_login:logout_view' %}">Salir ({{request.user.cliente}})</a></li>
+    <li><a class="waves-effect waves-light modal-trigger" href="#modal1">{{request.user.cliente}}</a></li>
   </ul>
 
     <div class="container">
@@ -53,7 +53,46 @@
       {% endblock container %}
     </div >
 
-  {% block js %}
+  {% block js %}  
   {% endblock js %}
+
+  <!-- Modal Structure -->
+  <div id="modal1" style="height:55%; width:35%;" class="modal modal-fixed-footer">
+    <div class="modal-content" style="overflow:hidden; ">
+      <form class="container" action="{% url 'Clientes:edit' %}" method="POST">
+        {% csrf_token %}
+        <div style="text-align: center;">
+          <i class="material-icons" style="font-size: 80px;">person_outline</i>
+        </div>
+        <div class="input-field">
+          <input placeholder="Ingrese Nombre" value="{{request.user.cliente.Nombre}}" name="nombre" id="nombre" type="text" class="validate" required>
+          <label for="nombre">Nomnbre</label>
+        </div>
+          <div class="input-field">
+          <input placeholder="Ingrese Apellido" value="{{request.user.cliente.Apellido}}" name="apellido" id="apellido" type="text" class="validate" required>
+          <label for="apellido">Apellido</label>
+        </div>
+        <div class="input-field">
+            <input placeholder="Ingrese Contraseña" value="" name="pass" id="pass" type="password" class="validate" required>
+            <label for="contraseña">Contraseña</label>
+        </div>
+        <div class="center">
+            <input type="submit" class="btn btn-success" value="Actualizar">
+        </div>        
+      </form>
+    <!-- Flooter modal-->
+      <div class="modal-footer" >
+      <div class="container">
+        <a href="{% url 'app_login:logout_view' %}" class="modal-close container waves-effect waves-green btn-flat">Cerrar Sesión</a>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Structure close-->
+  <script>
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
+  </script>
 </body>
 </html>
