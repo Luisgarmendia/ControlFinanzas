@@ -7,8 +7,7 @@
 {% block container %}
 
     <div class="row" style="margin-top: 3%">
-        <!-- formulario -->
-        <div class="col s3">
+        <div class="col s12 l3">
             {% if IngresoActual %}
             <form action="{% url 'Ingresos:actualizar_ingreso' IngresoActual.id %}" method="post">
             {% else %}
@@ -25,7 +24,7 @@
             {% endif %}
                 {% csrf_token %}
                 <div class="mb-3">
-                    <div class="input-field col s12"  required autofocus>
+                    <div class="input-field"  required autofocus>
                         <select class="form-control" name="fuente" id="fuente">
                             {% for d in Fuente %}
                                 {% if IngresoActual.Fuente.id == d.id %}
@@ -41,15 +40,15 @@
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    <div class="input-field col s12">
+                <div>
+                    <div class="input-field">
                         <input placeholder="Ingrese un monto" value="{{ IngresoActual.Monto }}" name="monto" pattern="[0-9]+"  id="monto" type="number" class="validate" required>
                         <label for="monto">Monto</label>
                     </div>
                 </div>
                 
 
-                <div class="mb-3">
+                <div>
                     {% if IngresoActual %}
                     <input type="submit" class="btn btn-success" value="Actualizar Ingreso">
                     {% else %}
@@ -58,7 +57,7 @@
                 </div>
             </form>
         </div>
-        <div class="col s9">
+        <div class="col s12 l9">
             <table class="striped">
                 <thead>
                     <tr>
