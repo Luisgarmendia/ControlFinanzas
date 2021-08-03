@@ -43,24 +43,27 @@ def registrar_gasto(request):
         tipo = request.POST.get('tipo')
         monto = int(request.POST.get('monto'))
         idFuente = request.POST.get('fuente')
-        tipoGasto = TipoGasto.objects.get(id=tipo)
-        if idFuente:
-            fuente = FuenteDinero.objects.get(id=idFuente)
-            if monto > 0:
-                if fuente.Saldo > monto :
-                    fuente.Saldo = fuente.Saldo - monto
-                    fuente.save()
-                    p = Gasto(Fuente=fuente,Fecha_Registro=hoy,Tipo=tipoGasto, Monto=monto)
-                    p.save()
-                    messages.add_message(request, messages.ERROR, 'Se ha registrado su gasto.')
+        if tipo:
+            tipoGasto = TipoGasto.objects.get(id=tipo)  
+            if idFuente:
+                fuente = FuenteDinero.objects.get(id=idFuente)
+                if monto > 0:
+                    if fuente.Saldo > monto :
+                        fuente.Saldo = fuente.Saldo - monto
+                        fuente.save()
+                        p = Gasto(Fuente=fuente,Fecha_Registro=hoy,Tipo=tipoGasto, Monto=monto)
+                        p.save()
+                        messages.add_message(request, messages.ERROR, 'Se ha registrado su gasto.')
+                    else:
+                        messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'El monto es insuficiente.')
+                    messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
+                
+                return redirect(reverse('Gastos:index'))
             else:
-                messages.add_message(request, messages.ERROR, 'Ingrese un monto mayor a 0.')
-            
-            return redirect(reverse('Gastos:index'))
+                messages.add_message(request, messages.ERROR, 'Debe seleccionar una fuente')
         else:
-            messages.add_message(request, messages.ERROR, 'Debe seleccionar una fuente')
+            messages.add_message(request, messages.ERROR, 'Debe seleccionar un tipo de gasto')
         
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
     ctx = {

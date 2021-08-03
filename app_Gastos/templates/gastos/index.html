@@ -20,6 +20,9 @@
                 {% for message in messages %}
                     {{ message|safe }}
                 {% endfor %}
+                <br>
+                <br>
+
                 </div>
             {% endif %}
                 {% csrf_token %}
@@ -36,7 +39,7 @@
                                     {% endif %}
     
                                 {% empty %}
-    
+                                    <option value="" disabled>Ingrese Un tipo de gasto</option>
                                 {% endfor %}
                             </select>
                             <label>Tipo de gasto</label>
@@ -61,7 +64,7 @@
                                 
 
                             {% empty %}
-                                <option value="">Ingrese una fuentes de dinero</option>
+                                <option value="" disabled>Ingrese una fuentes de dinero</option>
                             {% endfor %}
                         </select>
                         <label>Fuentes</label>
