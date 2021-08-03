@@ -50,6 +50,9 @@ def log_in(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
+            if user.is_staff:
+                messages.add_message(request, messages.ERROR, 'El usuario no puede iniciar sesión')
+                return redirect('/login/')
             login(request, user)
             return index(request)
         else:

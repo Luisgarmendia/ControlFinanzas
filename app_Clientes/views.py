@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls.base import reverse
 from .models import Cliente
 # Create your views here.
 #importar login required para evitar acceso no autorizado
@@ -66,15 +67,19 @@ def editar(request):
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         contra = request.POST.get('contra')
+        contraanterior = request.POST.get('anterior')
         confcontra = request.POST.get('confirmar')
         if contra != confcontra:
-            return messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden')
-        cliente.Nombre = nombre
-        cliente.Apellido = apellido
-        cliente.save()
-        if contra != '' and confcontra != '':
-            usuario.set_password(contra)
-            usuario.save()
+            messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden')
+            return redirect(reverse('Estadisticas:index'))
+
+        if usuario.check_password(contraanterior):
+            cliente.Nombre = nombre
+            cliente.Apellido = apellido
+            cliente.save()
+            if contra != '' and confcontra != '':
+                usuario.set_password(contra)
+                usuario.save()  
     return redirect('/')
     
     

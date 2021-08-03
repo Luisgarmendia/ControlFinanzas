@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <div class="col s6">
                     <div class="input-field col s12"  required autofocus>
-                        <select class="form-control" name="tipos" id="tipos" onchange="javascript:Recargar()">
+                        <select class="form-control" name="tipos" id="tipos" >
                             {% if filtro == "1" %}
                                 <option value="1" selected>Informe Gastos</option>
                                 <option value="2">Informe Fuentes</option>
@@ -37,7 +37,7 @@
                         <label>Tipos de Datos</label>
                     </div>
                     <div class="input-field col s12"  required autofocus>
-                        <select class="form-control" name="busqueda" id="busqueda" onchange="javascript:Recargar()">
+                        <select class="form-control" name="busqueda" id="busqueda">
                             {% if busqueda == '1' %}
                                 <option value="1" selected>Busqueda por mes y año</option>
                                 <option value="2">Busqueda por año</option>
@@ -269,13 +269,7 @@
         
             });
         </script>
-        
-    <script>
-       function Recargar(){
-            console.log('Recargar');
-            $("form").submit();
-        };
-    </script>
+
     {% endblock js %}
 {% endblock  %}
 

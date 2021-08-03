@@ -16,8 +16,8 @@ def index(request):
     filtro = 0
     busqueda = 0
     mesActual = datetime.now().month
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
 
     data3 = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user, Fecha_Registro__month=mesActual)
     data4 = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user, Fecha_Registro__month=mesActual)
@@ -150,6 +150,6 @@ def index(request):
         'Ingreso':data3,
         'filtro':filtro,
         'busqueda':busqueda,
-        'Saldo':Saldo.get('Saldo__sum')
+        'Saldo':Saldo
     }
     return render(request, 'estadisticas/index.html',ctx)

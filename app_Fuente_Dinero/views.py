@@ -16,11 +16,15 @@ from django.db.models import Sum
 @login_required
 def index(request):
     fuente =  FuenteDinero.objects.filter(Cliente=request.user.cliente)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo')).get('t')
+    Saldo = Saldo if Saldo else 0
+    TotalGastos=0
+    TotalGastos = FuenteDinero.objects.filter(Cliente__Usuario=request.user).aggregate(t=Sum('Saldo'))['t']
+    TotalGastos = TotalGastos if TotalGastos else 0
     ctx = {
-        "Saldo":Saldo.get('Saldo__sum'),
-        'fuentes':fuente
+        "Saldo":Saldo,
+        'fuentes':fuente,
+        'TotalGastos':TotalGastos
     }
     return render(request, 'RegistroFuente/index.html',ctx)
 
@@ -42,13 +46,17 @@ def editar(request,id):
             messages.add_message(request, messages.ERROR, 'No se ha ingresado un monto correcto.')
         return redirect(reverse('FuenteDinero:index'))
     else:
-        Saldo = 0
-        Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+        Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo')).get('t')
+        Saldo = Saldo if Saldo else 0
+        TotalGastos = FuenteDinero.objects.filter(Cliente__Usuario=request.user).aggregate(t=Sum('Saldo'))['t']
+        TotalGastos = TotalGastos if TotalGastos else 0
         ctx={
             "FuenteActual":FuenteD,
             'fuentes':fuente,
-            "Saldo":Saldo.get('Saldo__sum'),
+            "Saldo":Saldo,
+            'TotalGastos':TotalGastos
         }
+
         return render(request, 'RegistroFuente/index.html' , ctx)
 #crear la vista de edit
 @login_required
@@ -59,7 +67,7 @@ def registrar(request):
         Fecha = datetime.now().date()
         fuente = request.POST.get('nombre')
         saldo = int(request.POST.get('monto'))
-        fuentes_exist =  FuenteDinero.objects.filter(Fuente = fuente).count()
+        fuentes_exist =  FuenteDinero.objects.filter(Fuente = fuente,Cliente=request.user.cliente).count()
 
         if not fuentes_exist:
             if saldo > 0:

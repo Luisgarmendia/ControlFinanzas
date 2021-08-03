@@ -69,6 +69,17 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            {% if TotalGastos > 0 %}
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-danger text-center">
+                        <div class="right-align"><b>Total:
+                            <span id="total">{{ TotalGastos |floatformat:2|intcomma}} Lps.</span>
+                            </b></div>
+                        </td>
+                    </tr> 
+                </tfoot>
+            {% endif %} 
         </table>
     </div>
 </div>

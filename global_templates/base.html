@@ -29,7 +29,7 @@
       <a href="/" class="brand-logo">Saldo: {% block saldo %}{% endblock saldo %}</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/">Dashboard</a></li>
+        <li><a href="/">Estadisticas</a></li>
         <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
         <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
         <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
@@ -39,7 +39,7 @@
   </nav>
 
   <ul class="sidenav" id="mobile-demo">
-    <li><a href="/">Dashboard</a></li>
+    <li><a href="/">Estadisticas</a></li>
     <li><a href="{% url 'Gastos:index' %}">Gastos</a></li>
     <li><a href="{% url 'FuenteDinero:index' %}">Fuente de Dinero</a></li>
     <li><a href="{% url 'Ingresos:index' %}">Ingresos</a></li>
@@ -66,18 +66,22 @@
         </div>
         <div class="input-field">
           <input placeholder="Ingrese Nombre" value="{{request.user.cliente.Nombre}}" name="nombre" id="nombre" type="text" class="validate" required>
-          <label for="nombre">Nomnbre</label>
+          <label for="nombre">Nombre</label>
         </div>
           <div class="input-field">
           <input placeholder="Ingrese Apellido" value="{{request.user.cliente.Apellido}}" name="apellido" id="apellido" type="text" class="validate" required>
           <label for="apellido">Apellido</label>
         </div>
         <div class="input-field">
+            <input placeholder="Contraseña Anterior" value="" name="contra" id="anterior" type="password" class="validate" >
+            <label for="contraseña">Contraseña</label>
+        </div>
+        <div class="input-field">
             <input placeholder="Ingrese Contraseña" value="" name="contra" id="pass" type="password" class="validate" >
             <label for="contraseña">Contraseña</label>
         </div>
         <div class="input-field">
-            <input placeholder="Ingrese Contraseña" value="" name="confirmar" id="pass" type="password" class="validate" >
+            <input placeholder="Confirmar Contraseña" value="" name="confirmar" id="pass" type="password" class="validate" >
             <label for="contraseña">Confirmar</label>
         </div>
         <div class="center">
@@ -96,6 +100,9 @@
   <script>
     $(document).ready(function(){
       $('.modal').modal();
+      {% if mensaje %}
+        alert("Las contraseñas no coinciden")
+      {% endif %}
     });
   </script>
 </body>

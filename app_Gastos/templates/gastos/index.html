@@ -61,7 +61,7 @@
                                 
 
                             {% empty %}
-                                <option value="-1">Ingrese una fuentes de dinero</option>
+                                <option value="">Ingrese una fuentes de dinero</option>
                             {% endfor %}
                         </select>
                         <label>Fuentes</label>
@@ -114,29 +114,34 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                {% if TotalGastos > 0 %}
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-danger text-center">
+                            <div class="right-align"><b>Total:
+                                <span id="total">{{ TotalGastos |floatformat:2|intcomma}} Lps.</span>
+                                </b></div>
+                            </td>
+                        </tr> 
+                    </tfoot>    
+                   {% endif %}
             </table>
         </div>
     </div>
     <!-- Modal Structure -->
     <div id="modalTipoGasto" style="height:60%; width:60%;" class="modal modal-fixed-footer">
         <div class="modal-content" style="overflow:hidden; ">
-            {% if CurrentTipoGasto %}
-            <form class="container" action="{% url 'Gastos:editTipoGasto' CurrentTipoGasto.id %}" method="POST">
-            {% else %}
-            <form class="container" action="{% url 'Gastos:addTipoGasto' %}" method="POST">
-            {% endif %}
+            <form class="container"id='formTipoGasto' action="{% url 'Gastos:addTipoGasto' %}" method="POST">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col s12 l3">
                         {% csrf_token %}
                         <div class="input-field">
-                            <input placeholder="Ingrese Tipo" value="{{TipoGasto.Tipo}}" name="tipo" id="tipo" type="text" class="validate" required>
-                            <label for="tipo">Tipo</label>
+                            <input placeholder="Ingrese Tipo" name="tipo" id="tipoGasto" type="text" class="validate" required>
+                            <label for="tipoGasto">Tipo</label>
                         </div>
-                        {% if CurrentTipoGasto %}
-                        <input type="submit" class="btn btn-success" value="Actualizar">
-                        {% else %}
-                        <input type="submit" class="btn btn-success" value="Registrar">
-                        {% endif %}
+
+                        <button id="guardarTipo" onclick='javascrips:funtions(){$("#formTipoGasto").submit()}' class="btn btn-success">Registrar</button>
                     </div>
                     <div class="col s12 l9">
                         <table class="table table-striped">
@@ -148,11 +153,11 @@
                             </thead>
                             <tbody>
                                 {% for t in TipoGasto %}
-                                <tr>
+                                <tr >
                                     <td>{{ t.Tipo }}</td>
                                     <td class="text-center">
                                         <a onclick="if (!confirm('Confirme la eliminación')) return false;" href="{% url 'Gastos:deleteTipoGasto' t.id %}" class="text-danger"><i class="Small material-icons">delete</i></a>
-                                        <a href="{% url 'Gastos:editTipoGasto' t.id %}" class="text-danger"><i class="Small material-icons">edit</i></a>
+                                        <a href="javascript:editTipoGasto({{t.id}}, '{{t.Tipo}}' )" class="text-danger"><i class="Small material-icons">edit</i></a>
                                     </td>
                                 </tr>
                                 {% empty %}
@@ -165,12 +170,7 @@
                     </div>
                 </div>
             </form>
-            <!-- Flooter modal-->
-            <div class="modal-footer" >
-                <div class="container">
-                    <a href="{% url 'app_login:logout_view' %}" class="modal-close container waves-effect waves-green btn-flat">Cerrar Sesión</a>
-                </div>
-            </div>
+           
         </div>
     </div>
     <!-- Modal Structure close-->
@@ -188,6 +188,32 @@
                 });
             }, 3000)
         });
+
+        function editTipoGasto(id,tipo){
+            $('#tipoGasto').val(tipo); 
+            $('#guardarTipo').attr('onclick','javascript:confirmarEdicion('+id+')'); 
+            $('#formTipoGasto').attr('action',''); 
+            $('#guardarTipo').text('Actualizar Tipo'); 
+        }
+
+        function confirmarEdicion(id){
+            var tipo = $('#tipoGasto').val();
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'Gastos:editTipoGasto' %}',
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    id: id,
+                    tipo: tipo,
+                },
+                success: function(data){
+                    if(data == 1){
+                        $('#modalTipoGasto').modal('close');
+                    }
+                }
+            });
+        }
+
     </script>
     {% endblock js %}
 {% endblock  %}

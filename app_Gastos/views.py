@@ -13,25 +13,31 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def index(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
-    data2 = TipoGasto.objects.all()
+    data2 = TipoGasto.objects.filter(Cliente__Usuario=request.user)
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
+    TotalGastos = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalGastos=TotalGastos if TotalGastos else 0
     ctx = {
         'Gasto': data,
         'TipoGasto': data2,
         'Fuente': data3,
-        'Saldo': Saldo.get('Saldo__sum')
+        'Saldo': Saldo,
+        'TotalGastos': TotalGastos,
     }
     return render(request, 'gastos/index.html',ctx)
 
 @login_required
 def registrar_gasto(request):
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
-    data2 = TipoGasto.objects.all()
+    data2 = TipoGasto.objects.filter(Cliente__Usuario=request.user)
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
+    TotalGastos = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalGastos=TotalGastos if TotalGastos else 0
+    
     if request.method == 'POST':
         hoy = datetime.now().date()
         tipo = request.POST.get('tipo')
@@ -61,7 +67,8 @@ def registrar_gasto(request):
         'Gasto': data,
         'TipoGasto': data2,
         'Fuente': data3,
-        'Saldo': Saldo.get('Saldo__sum')
+        'Saldo': Saldo,
+        'TotalGastos': TotalGastos,
     }
     return render(request, 'gastos/index.html',ctx)
 
@@ -69,13 +76,15 @@ def registrar_gasto(request):
 def actualizar_gasto(request, id):
     gasto = Gasto.objects.get(pk=id)
     data = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user)
-    data2 = TipoGasto.objects.all()
+    data2 = TipoGasto.objects.filter(Cliente=request.user.cliente)
     data3 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
     fuente_antigua = gasto.Fuente
     monto_antiguo = gasto.Monto
-
+    TotalGastos = Gasto.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalGastos=TotalGastos if TotalGastos else 0
+    
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
         monto = int(request.POST.get('monto'))
@@ -130,12 +139,14 @@ def actualizar_gasto(request, id):
 
         return redirect(reverse('Gastos:index'))
     else:
+
         ctx = {
             'Gasto': data,
             'TipoGasto': data2,
             'Fuente': data3,
             'GastoActual': gasto,
-            'Saldo': Saldo.get('Saldo__sum')
+            'Saldo': Saldo,
+            'TotalGastos': TotalGastos,
         }
     
     
@@ -155,26 +166,20 @@ def addTipoGasto(request):
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
 
-        TipoGastoD = TipoGasto(Tipo=tipo)
+        TipoGastoD = TipoGasto(Tipo=tipo,Cliente=request.user.cliente)
         TipoGastoD.save()
     return redirect(reverse('Gastos:index'))
 
 @login_required
-def editTipoGasto(request,id):
-    TipoGastoD = TipoGasto.objects.get(pk=id)
-    if request.method == 'POST':
+def editTipoGasto(request):
+    print(request.POST)
+    if request.is_ajax()and request.method == 'POST':
+        TipoGastoD= TipoGasto.objects.get(id=request.POST.get('id'))
         tipo = request.POST.get('tipo')
-
         TipoGastoD.Tipo = tipo
         TipoGastoD.save()
-        return redirect(reverse('Gastos:index'))
-    else:
-        ctx={
-            "CurrentTipoGasto":TipoGastoD,
-        }
-        return render(request, 'gastos/index.html' , ctx)
-
-@login_required
+    return redirect(reverse('Gastos:index'))
+@login_required 
 def deleteTipoGasto(request,id):
     TipoGasto.objects.get(pk=id).delete()
     return redirect(reverse('Gastos:index'))

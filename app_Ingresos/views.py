@@ -12,15 +12,16 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
-    TotalIngresos = 0
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
+    
     TotalIngresos = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalIngresos = TotalIngresos if TotalIngresos else 0
 
     ctx = {
         'Ingreso': data,
         'Fuente': data2,
-        'Saldo': Saldo.get('Saldo__sum'),
+        'Saldo': Saldo,
         'TotalIngresos': TotalIngresos
     }
     return render(request, 'Ingresos/index.html', ctx)
@@ -29,8 +30,8 @@ def index(request):
 def registrar_ingreso(request):
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
     if request.method == 'POST':
         idFuente = request.POST.get('fuente')
         hoy = datetime.now().date()
@@ -53,13 +54,13 @@ def registrar_ingreso(request):
         
         
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
-    TotalIngresos = 0
     TotalIngresos = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalIngresos = TotalIngresos if TotalIngresos else 0
 
     ctx = {
         'Ingreso': data,
         'Fuente': data2,
-        'Saldo': Saldo.get('Saldo__sum'),
+        'Saldo': Saldo,
         'TotalIngresos': TotalIngresos
     }
 
@@ -70,17 +71,17 @@ def actualizar_ingreso(request, id):
     ingreso = Ingreso.objects.get(pk=id)
     data = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user)
     data2 = FuenteDinero.objects.filter(Cliente__Usuario=request.user)
-    Saldo = 0
-    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(Sum('Saldo'))
+    Saldo = FuenteDinero.objects.filter(Cliente = request.user.cliente).aggregate(t=Sum('Saldo'))['t']
+    Saldo = Saldo if Saldo else 0
     fuente_antigua = ingreso.Fuente
     monto_antiguo = ingreso.Monto
 
+    TotalIngresos = Ingreso.objects.filter(Fuente__Cliente__Usuario=request.user).aggregate(t=Sum('Monto'))['t']
+    TotalIngresos = TotalIngresos if TotalIngresos else 0
     if request.method == 'POST':
         idFuente = request.POST.get('fuente')
         monto = int(request.POST.get('monto'))
         fuente = FuenteDinero.objects.get(id=idFuente)
-
-
         if monto > 0:
             if fuente == ingreso.Fuente:
                 if monto > monto_antiguo:
@@ -127,7 +128,8 @@ def actualizar_ingreso(request, id):
             'Ingreso': data,
             'Fuente': data2,
             'IngresoActual': ingreso,
-            'Saldo': Saldo
+            'Saldo': Saldo,
+            'TotalIngresos': TotalIngresos
         }
     
     
