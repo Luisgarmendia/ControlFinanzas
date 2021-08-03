@@ -73,10 +73,11 @@ def editar(request):
             messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden')
             return redirect(reverse('Estadisticas:index'))
 
+        cliente.Nombre = nombre
+        cliente.Apellido = apellido
+        cliente.save()
+        
         if usuario.check_password(contraanterior):
-            cliente.Nombre = nombre
-            cliente.Apellido = apellido
-            cliente.save()
             if contra != '' and confcontra != '':
                 usuario.set_password(contra)
                 usuario.save()  
